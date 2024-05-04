@@ -1,4 +1,4 @@
-﻿using EnhancementMonkey.Api.Enhancements.Templates;
+﻿using EnhancementMonkey.Api.Enum;
 
 namespace EnhancementMonkey.Api.Ui.Submenues
 {
