@@ -1,10 +1,7 @@
 ﻿using BTD_Mod_Helper.Api.Components;
 using BTD_Mod_Helper.Api.Enums;
 using BTD_Mod_Helper.Api;
-using EnhancementMonkey.Api.Enhancements.Templates;
-using Il2CppAssets.Scripts.Models;
 using Il2CppAssets.Scripts.Unity.UI_New.InGame;
-using Il2CppAssets.Scripts.Unity;
 using MelonLoader;
 using System;
 using System.Collections.Generic;
@@ -12,11 +9,17 @@ using UnityEngine;
 using BTD_Mod_Helper.Extensions;
 using Il2CppAssets.Scripts.Simulation.Towers;
 using EnhancementMonkey.Api.Ui.Submenues;
-using static EnhancementMonkey.Main;
-using EnhancementMonkey.Api.Enum;
+using BTD_Mod_Helper;
+using Il2CppAssets.Scripts.Unity.UI_New.Popups;
+using HarmonyLib;
+using Il2CppAssets.Scripts.Models.Towers.Projectiles.Behaviors;
+using EnhancementMonkey.Api.Enhancements.Weapon;
 
 namespace EnhancementMonkey.Api.Ui
 {
+    /// <summary>
+    /// If creating a mod for this, you shouldn't need to touch this class. Use MainUi.instance unless you're creating the main panel.
+    /// </summary>
     [RegisterTypeInIl2Cpp(false)]
     public class MainUi : MonoBehaviour
     {
@@ -29,10 +32,13 @@ namespace EnhancementMonkey.Api.Ui
             if (gameObject)
             {
                 Destroy(gameObject);
+
+                foreach (var enhancement in ModContent.GetContent<ModEnhancement>())
+                {
+                    enhancement.Added = false;
+                }
             }
         }
-
-
 
         public static void CreateMainPanel(List<ModSubmenu> submenus, Tower tower)
         {
@@ -50,38 +56,169 @@ namespace EnhancementMonkey.Api.Ui
 
                 ModHelperButton button = panel.AddButton(new("Button_", 325, y, 500, 200, new()), VanillaSprites.GreenBtnLong, new System.Action(() =>
                 {
-                    instance.OpenSubmenu(tower, rect, menu.Name, menu.Info.Group, Game.instance.model);
+                    instance.OpenSubmenu(tower, rect, menu, menu.Info.Group);
                 }));
                 ModHelperText text = button.AddText(new("Text_", 0, 0, 700, 175), menu.Info.Name, 70);
             }
         }
 
-
-
-        public void OpenSubmenu(Tower tower, RectTransform rect, string submenuName, EnhancementGroup group, GameModel game)
+        private ModHelperPanel CreateEnhancementPanel(RectTransform rect, ModEnhancement enhancement, float width, float height, Tower tower)
         {
-            instance.Close();
-
-            List<ModEnhancement> enhancements = ModContent.GetContent<ModEnhancement>();
-            List<ModEnhancement> enhancements_ = new();
-
-            foreach (var enhancement in enhancements)
+            string textureName()
             {
-                if (enhancement.EnhancementGroup == group)
+                if (enhancement.Background == EnhancementLevel.Basic)
                 {
-                    enhancements_.Add(enhancement);
+                    return "Basic";
+                }
+                else if (enhancement.Background == EnhancementLevel.Good)
+                {
+                    return "Good";
+                }
+                else if (enhancement.Background == EnhancementLevel.Great)
+                {
+                    return "Great";
+                }
+                else if (enhancement.Background == EnhancementLevel.Awesome)
+                {
+                    return "Awesome";
+                }
+                else if (enhancement.Background == EnhancementLevel.Godly)
+                {
+                    return "Godly";
+                }
+                else if (enhancement.Background == EnhancementLevel.Pure)
+                {
+                    return "Pure";
+                }
+                else if (enhancement.Background == EnhancementLevel.Hidden)
+                {
+                    return "Hidden";
+                }
+                else
+                {
+                    return "Basic";
                 }
             }
 
-            float enhancementPanelWidth = 780;
-            float enhancmentButtonHeight = 680;
+            ModHelperPanel panel2 = ModHelperPanel.Create(new("EnhancementPanel_", 0, 0, width, height), ModContent.GetSpriteReference<Main>(textureName()).GUID);
 
-            float PanelWidth = enhancementPanelWidth + 25;
-            float PanelHeight = enhancmentButtonHeight * enhancements_.Count;
+            var icon = panel2.AddImage(new("Icon_", 0, 75, 300), enhancement.Icon);
+            var name = panel2.AddText(new("Title_", 0, 330, width, 100), enhancement.EnhancementName);
+            var price = panel2.AddText(new("Cost_", 0, 290, width, 100), "$" + enhancement.Cost);
+            price.Text.color = Color.green;
 
-            ModHelperScrollPanel panel = rect.gameObject.AddModHelperScrollPanel(new("Panel_", 1500, 2000, PanelWidth, PanelHeight, new()), RectTransform.Axis.Vertical, VanillaSprites.BlueInsertPanel);
+            var desc = panel2.AddText(new("Description_", 0, -100, width * .9616f, height / 2 - 50), enhancement.Description);
 
-            ModHelperText text1 = panel.AddText(new("Text_Title", 0, 0, 700, 160), submenuName + " Enhancements");
+            ModHelperButton buyButton = panel2.AddButton(new("EnhancementPanel_",0 , -300, width / 1.33f, height / 5), VanillaSprites.BlueBtnLong, new Action(() =>
+            {
+                bool inAGame = InGame.instance != null && InGame.instance.bridge != null;
+                if (inAGame)
+                {
+                    if (InGame.instance.GetCash() >= enhancement.Cost)
+                    {
+                        InGame.instance.AddCash(-enhancement.Cost);
+                        tower.worth += enhancement.Cost;
+                        enhancement.Cost += (int)(enhancement.BaseCost * enhancement.CostMultiplier);
+                        enhancement.TimesBought++;
+
+                        tower.UpdatedModel(tower.towerModel);
+
+                        enhancement.ApplyEnhancement(tower);
+
+                        if (DebugMode)
+                        {
+                            ModHelper.Log<Main>("Bought Enhancement!");
+                        }
+                        if (PopupScreen.instance != null)
+                        {
+                            if (ShowBuyPopups)
+                            {
+                                PopupScreen.instance.ShowOkPopup("Bought Enhancement! You can turn off this popup in the config.");
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (DebugMode)
+                        {
+                            ModHelper.Log<Main>("Not enough cash.");
+                            ModHelper.Log<Main>($"Costs {enhancement.Cost} while the player only has {InGame.instance.GetCash()}");
+                        }
+                        if (PopupScreen.instance != null)
+                        {
+                            if (ShowBuyPopups)
+                            {
+                                PopupScreen.instance.ShowOkPopup("Not enough cash.");
+                            }
+                        }
+                    }
+                }
+                price.SetText("$" + enhancement.Cost);
+            }));
+            ModHelperText buyText = buyButton.AddText(new("BuyText_", 0, 0, width / 1.33f, height / 5), "Buy", 100);
+
+            return panel2;
+        }
+
+        public void OpenSubmenu(Tower tower, RectTransform rect, ModSubmenu submenu, EnhancementType group)
+        {
+            instance?.Close();
+
+            foreach (var enhancement in ModContent.GetContent<ModEnhancement>())
+            {
+                enhancement.Added = false;
+            }
+
+            List<ModEnhancement> enhancements = ModContent.GetContent<ModEnhancement>();
+            List<ModEnhancement> enhancements_ = [];
+
+            foreach (var level in UnlockedLevels)
+            {
+                foreach (var enhancement in enhancements)
+                {
+                    if (enhancement.Modifies == ModifyType.Unlock & UnlockedLevels.Contains(enhancement.EnhancementLevel))
+                    {
+                        if (enhancement.EnhancementGroup == group)
+                        {
+                            if (!enhancement.Locked & !enhancement.Added)
+                            {
+                                enhancements_.Add(enhancement);
+                                enhancement.Added = true;
+                                if (DebugMode)
+                                {
+                                    ModHelper.Log<Main>("Added Enhancement " + enhancement.EnhancementName);
+                                }
+                            }
+
+                        }
+                    }
+                    else if(enhancement.EnhancementLevel == level)
+                    {
+                        if (enhancement.EnhancementGroup == group)
+                        {
+                            if (!enhancement.Locked & !enhancement.Added)
+                            {
+                                enhancements_.Add(enhancement);
+                                if (DebugMode)
+                                {
+                                    ModHelper.Log<Main>("Added Enhancement " + enhancement.EnhancementName);
+                                }
+                            }
+
+                        }
+                    }
+                }
+            }
+
+            float enhancementPanelWidth = 680;
+            float enhancementButtonHeight = 780;
+
+            float PanelWidth = enhancementPanelWidth * 1.3f;
+            float PanelHeight = enhancementButtonHeight * 1.3f;
+
+            ModHelperScrollPanel panel = rect.gameObject.AddModHelperScrollPanel(new("Panel_", 1500, 2000, PanelWidth, PanelHeight, new()), RectTransform.Axis.Vertical, VanillaSprites.BlueInsertPanel, 45, 100);
+
+            panel.AddScrollContent(ModHelperText.Create(new("Title_", 0, 500, PanelWidth, 160), submenu.Info.Name, 60)); // 
 
             MainUi ui = panel.AddComponent<MainUi>();
 
@@ -91,78 +228,13 @@ namespace EnhancementMonkey.Api.Ui
 
             foreach (var enhancement in enhancements_)
             {
-                foreach (var level in UnlockedLevels)
+                panel.AddScrollContent(CreateEnhancementPanel(rect, enhancement, enhancementPanelWidth, enhancementButtonHeight, tower));
+
+                ModHelperButton exitButton = panel.AddButton(new("Button_Exit", PanelWidth, PanelHeight / 2, 500), VanillaSprites.ExitIcon, new Action(() =>
                 {
-                    if (enhancement.EnhancementLevel == level)
-                    {
-                        string textureName()
-                        {
-                            if (UnlockedLevels.IndexOf(level) == 0)
-                            {
-                                return "Basic";
-                            }
-                            else if (UnlockedLevels.IndexOf(level) == 1)
-                            {
-                                return "Good";
-                            }
-                            else if (UnlockedLevels.IndexOf(level) == 2)
-                            {
-                                return "Great";
-                            }
-                            else if (UnlockedLevels.IndexOf(level) == 3)
-                            {
-                                return "Awesome";
-                            }
-                            else if (UnlockedLevels.IndexOf(level) == 4)
-                            {
-                                return "Godly";
-                            }
-                            else if (UnlockedLevels.IndexOf(level) == 5)
-                            {
-                                return "Pure";
-                            }
-                            else if (UnlockedLevels.IndexOf(level) == 6)
-                            {
-                                return "Hidden";
-                            }
-                            else
-                            {
-                                return "Basic";
-                            }
-                        }
+                    instance.Close();
+                }));
 
-                        float buttonX = 402;
-                        float buttonY = (200 * enhancements.Count) + 40 - 200 * enhancements.IndexOf(enhancement) - 50 - enhancements.IndexOf(enhancement) * 10;
-
-                        ModHelperButton button = panel.AddButton(new("Button_", 0, 0, 500, 200, new(0.5f, 0.5f)), VanillaSprites.GreyInsertPanel, new System.Action(() =>
-                        {
-                            if (game.cash >= enhancement.ActualCost)
-                            {
-                                if (!enhancement.Locked)
-                                {
-                                    enhancement.ApplyEnhancement(tower.towerModel);
-
-                                    game.cash -= enhancement.ActualCost;
-
-                                    tower.worth += enhancement.ActualCost;
-                                }
-                            }
-                        }));
-
-                        var icon = button.AddPanel(new("Icon_", 0, buttonY = 50, 100), enhancement.Icon);
-                        var text = button.AddText(new("Title_", 0, buttonY + 50, 100), enhancement.EnhancementName);
-
-                        if (enhancement.Locked)
-                        {
-                            var lockIcon = button.AddImage(new("lock", 0, 0, 200), VanillaSprites.LockIcon);
-                        }
-                    }
-
-                    ModHelperButton exitButton = panel.AddButton(new("Button_Exit", PanelWidth, PanelHeight / 2, 500), VanillaSprites.ExitIcon, new System.Action(() =>
-                    {
-                        instance.Close();
-                    }));
-                }
             }
         }
     }

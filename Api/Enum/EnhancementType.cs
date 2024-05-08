@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 namespace EnhancementMonkey.Api.Enum
 {
     /// <summary>
-    /// Use AddedByMod for any custom enhancement classes (if they aren't ModEnhancements)
+    /// Which type of enhancement this is.
     /// </summary>
-    public enum EnhancementGroup
+    public enum EnhancementType
     {
         Normal,
         Weapon,
         Ability,
         Misc,
-        AddedByMod
+        Hide
     }
 }

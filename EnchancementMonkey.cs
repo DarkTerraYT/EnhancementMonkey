@@ -2,10 +2,11 @@
 using BTD_Mod_Helper.Api.Towers;
 using BTD_Mod_Helper.Extensions;
 using Il2CppAssets.Scripts.Models.Towers;
+using Il2CppAssets.Scripts.Models.Towers.Behaviors;
+using Il2CppAssets.Scripts.Models.Towers.Behaviors.Attack;
 using Il2CppAssets.Scripts.Models.TowerSets;
 using Il2CppAssets.Scripts.Unity.Display;
 using System.Linq;
-using UnityEngine;
 
 namespace EnhancementMonkey
 {
@@ -15,16 +16,18 @@ namespace EnhancementMonkey
 
         public override string BaseTower => TowerType.DartMonkey;
 
-        public override string Icon => Portrait;
+        public override string Portrait => Icon;
 
-        public override int Cost => 200;
+        public override int Cost => 0;
 
-        public override string Description => "Use enhancements to level up this monkey.";
+        public override string Description => "Use enhancements to level up this monkey. STARTS WITH NO ATTACKS!";
 
         public override void ModifyBaseTowerModel(TowerModel towerModel)
         {
-
+            towerModel.RemoveBehavior<AttackModel>();
         }
+
+        public override int ShopTowerCount => 1;
     }
 
     public class Display : ModTowerDisplay<EnhancementMonkey>
@@ -37,7 +40,7 @@ namespace EnhancementMonkey
         {
             for(int i = 0; i < node.GetMeshRenderers().Count; i++)
             {
-                SetMeshTexture(node, Name, i);
+                SetMeshTexture(node, Name + i, i);
                 SetMeshOutlineColor(node, new(0, 0.7f, 0), i);
             }
         }
