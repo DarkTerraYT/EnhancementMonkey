@@ -2,8 +2,7 @@
 {
     public enum ModifyType
     {
-        Dummy = -2,
-        Unlock,
+        Unlock = -1,
         Other,
         Tower,
         Weapon,
