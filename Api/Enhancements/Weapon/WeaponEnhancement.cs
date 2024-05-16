@@ -1,13 +1,11 @@
-﻿using BTD_Mod_Helper.Api.Bloons;
-using BTD_Mod_Helper.Extensions;
+﻿using BTD_Mod_Helper.Extensions;
 using Il2CppAssets.Scripts.Models.Towers;
 using Il2CppAssets.Scripts.Models.Towers.Behaviors.Attack;
+using Il2CppAssets.Scripts.Models.Towers.Filters;
+using Il2CppAssets.Scripts.Models.Towers.Projectiles.Behaviors;
 using Il2CppAssets.Scripts.Unity;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EnhancementMonkey.Api.Enhancements.Weapon
 {
@@ -25,14 +23,50 @@ namespace EnhancementMonkey.Api.Enhancements.Weapon
         /// </summary>
         public override float CostMultiplier => 1.1f;
 
-        protected abstract string towerID { get; }
-        protected virtual int index => 0;
-        protected virtual AttackModel AttackModel => Game.instance.model.GetTowerFromId(towerID).GetAttackModel(index).Duplicate();
+        public override string Description => WeaponDescriptionBuilder();
+
+        string WeaponDescriptionBuilder()
+        {
+            string description = "";
+
+            string[] vowels = ["a", "e", "i", "o", "u"];
+
+            if (EnhancementName.ToLower().Contains("the "))
+            {
+                description = "Gives the Enhancement Monkey " + EnhancementName;
+            }
+            else if (vowels.Contains(EnhancementName[1].ToString().ToLower()))
+            {
+                description = "Gives the Enhancement Monkey an " + EnhancementName;
+            }
+            else
+            {
+                description = "Gives the Enhancement Monkey a " + EnhancementName;
+            }
+
+            return description;
+        }
+
+        protected abstract string TowerID { get; }
+        protected virtual int Index => 0;
+        protected virtual AttackModel AttackModel => Game.instance.model.GetTowerFromId(TowerID).GetAttackModel(Index).Duplicate();
 
         protected override void ModifyTower(TowerModel towerModel)
         {
             var attackModel = Apply(AttackModel);
             attackModel.range = towerModel.range;
+
+            if (!Game.instance.model.GetTowerFromId(TowerID).GetDescendant<FilterInvisibleModel>().isActive)
+            {
+                hitCamo = true;
+            }
+            attackModel.GetDescendants<DamageModel>().ForEach(dmgModel =>
+            {
+                if (dmgModel.immuneBloonProperties != Il2Cpp.BloonProperties.Lead)
+                {
+                    hitLead = true;
+                }
+            });
 
             towerModel.AddBehavior(attackModel);
         }

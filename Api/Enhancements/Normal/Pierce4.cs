@@ -1,15 +1,8 @@
-﻿using BTD_Mod_Helper.Api.Enums;
+﻿
 using BTD_Mod_Helper.Extensions;
-using EnhancementMonkey.Api.Enum;
 using Il2CppAssets.Scripts.Models.Towers;
 using Il2CppAssets.Scripts.Models.Towers.Projectiles;
-using Il2CppAssets.Scripts.Models.Towers.Weapons;
-using Il2CppAssets.Scripts.Simulation.Towers;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EnhancementMonkey.Api.Enhancements.Normal
 {
@@ -29,13 +22,13 @@ namespace EnhancementMonkey.Api.Enhancements.Normal
 
         public override bool LockedByDefault => true;
 
-        public override void ModifyTower(Tower tower)
+        public override void ModifyTower(Il2CppAssets.Scripts.Simulation.Towers.Tower tower)
         {
             var towerModel = tower.rootModel.Duplicate().Cast<TowerModel>();
 
             foreach (var projectile in towerModel.GetDescendants<ProjectileModel>().ToList())
             {
-                if(projectile.GetDamageModel() != null)
+                if (projectile.GetDamageModel() != null)
                 {
                     projectile.pierce += 6;
                 }

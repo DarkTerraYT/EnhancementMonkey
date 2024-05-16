@@ -1,7 +1,6 @@
-﻿using BTD_Mod_Helper.Api.Enums;
+﻿
 using BTD_Mod_Helper.Extensions;
 using Il2CppAssets.Scripts.Models.Towers;
-using Il2CppAssets.Scripts.Simulation.Towers;
 
 namespace EnhancementMonkey.Api.Enhancements.Normal
 {
@@ -21,7 +20,7 @@ namespace EnhancementMonkey.Api.Enhancements.Normal
 
         public override ModifyType Modifies => ModifyType.Tower;
 
-        public override void ModifyTower(Tower tower)
+        public override void ModifyTower(Il2CppAssets.Scripts.Simulation.Towers.Tower tower)
         {
             var towerModel = tower.rootModel.Duplicate().Cast<TowerModel>();
 

@@ -1,6 +1,4 @@
-﻿using EnhancementMonkey.Api.Enum;
-
-namespace EnhancementMonkey.Api.Ui.Submenues
+﻿namespace EnhancementMonkey.Api.Ui.Submenues
 {
     public class NormalEnhancements : ModSubmenu
     {

@@ -1,16 +1,9 @@
-﻿using BTD_Mod_Helper.Api.Enums;
+﻿
 using BTD_Mod_Helper.Extensions;
-using EnhancementMonkey.Api.Enum;
 using Il2CppAssets.Scripts.Models.Towers;
 using Il2CppAssets.Scripts.Models.Towers.Filters;
 using Il2CppAssets.Scripts.Models.Towers.Projectiles;
 using Il2CppAssets.Scripts.Models.Towers.Weapons;
-using Il2CppAssets.Scripts.Simulation.Towers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EnhancementMonkey.Api.Enhancements.Misc
 {
@@ -30,12 +23,14 @@ namespace EnhancementMonkey.Api.Enhancements.Misc
 
         public override ModifyType Modifies => ModifyType.Weapon;
 
-        public override void ModifyTower(Tower tower)
+        public override void ModifyTower(Il2CppAssets.Scripts.Simulation.Towers.Tower tower)
         {
+            hitCamo = true;
+
             var towerModel = tower.rootModel.Duplicate().Cast<TowerModel>();
 
             towerModel.GetDescendants<FilterInvisibleModel>().ForEach(mod => mod.isActive = false);
-            towerModel.FindDescendants<ProjectileModel>().ForEach(proj => proj.SetHitCamo(true));
+            towerModel.GetDescendants<ProjectileModel>().ForEach(proj => proj.SetHitCamo(true));
 
             tower.UpdateRootModel(towerModel);
         }

@@ -1,20 +1,16 @@
-﻿using BTD_Mod_Helper;
-using BTD_Mod_Helper.Api;
+﻿using BTD_Mod_Helper.Api;
 using BTD_Mod_Helper.Extensions;
-using EnhancementMonkey.Api.Enum;
-using EnhancementMonkey.Api.Ui;
-using Il2CppAssets.Scripts.Models;
+using EnhancementMonkey.Api.Enhancements.Weapon;
+using EnhancementMonkey.Api.Ui.Submenues;
 using Il2CppAssets.Scripts.Models.Towers;
 using Il2CppAssets.Scripts.Models.Towers.Behaviors.Attack;
 using Il2CppAssets.Scripts.Models.Towers.Projectiles;
 using Il2CppAssets.Scripts.Models.Towers.Projectiles.Behaviors;
 using Il2CppAssets.Scripts.Models.Towers.Weapons;
-using Il2CppAssets.Scripts.Simulation.Towers;
-using Il2CppAssets.Scripts.Unity;
 using Il2CppAssets.Scripts.Unity.UI_New.InGame;
 using Il2CppAssets.Scripts.Unity.UI_New.InGame.AbilitiesMenu;
 using Il2CppAssets.Scripts.Unity.UI_New.Popups;
-using EnhancementMonkey.Api.Enhancements.Weapon;
+using System.Collections.Generic;
 
 namespace EnhancementMonkey.Api.Enhancements
 {
@@ -23,13 +19,32 @@ namespace EnhancementMonkey.Api.Enhancements
     /// </summary>
     public abstract class ModEnhancement : ModContent
     {
-        protected override int Order => Priority;
+        /// <summary>
+        /// Zero-Arguement Constructor Required for ModContent
+        /// </summary>
+        protected ModEnhancement() { }
+
+        protected sealed override int Order => Priority;
+
+        public static List<ModEnhancement> Enhancements = GetContent<ModEnhancement>();
+
+        public sealed override int RegisterPerFrame => EnhancementsLoadedPerFrame;
 
         // Methods
-        public override void Register()
+        public sealed override void Register()
         {
             Cost = BaseCost;
             Locked = LockedByDefault;
+
+            if (!ModHelper.HasMod(ModID) & ModID != null)
+            {
+                if (ModID != null)
+                {
+                    Locked = true;
+                    HasDependencies = false;
+                    Debug("Enhancement with the ID " + Name + " Does not have the required mod with the ID " + ModID, LogLevel.Dependency);
+                }
+            }
         }
 
         /// <summary>
@@ -40,34 +55,55 @@ namespace EnhancementMonkey.Api.Enhancements
         /// To apply this enhancement to a particular weapon use <see cref="ModifyWeapon(WeaponModel)"/> 
         /// </summary>
         /// <param name="tower">The Tower that the enhancement's being applied to.</param>
-        public void ApplyEnhancement(Tower tower)
+        public void ApplyEnhancement(Il2CppAssets.Scripts.Simulation.Towers.Tower tower)
         {
-            if (Modifies > ModifyType.Unlock)
+            if (ModID != null & !ModHelper.HasMod(ModID))
             {
-                ModifyTower(tower);
+                Debug("Enhancement with the ID " + Name + " Does not have the required mod with the ID " + ModID, LogLevel.Dependency);
+                return;
             }
-            ModifyOther();
-            AbilityMenu.instance.AbilitiesChanged();
+            else
+            {
+                if (Modifies > ModifyType.Unlock)
+                {
+                    ModifyTower(tower);
+                }
+                ModifyOther();
+                AbilityMenu.instance.AbilitiesChanged();
 
-            if (LockAfterBuy)
-            {
-                Locked = true;
-                MainUi.instance?.Close();
-                if(PopupScreen.instance != null)
+                if (LockAfterBuy)
                 {
-                    PopupScreen.instance.ShowOkPopup("Max amount of this enhancement as been bought!");
+                    Locked = true;
+                    if (PopupScreen.instance != null)
+                    {
+                        PopupScreen.instance.ShowOkPopup("Max amount of this enhancement as been bought!");
+                    }
+                    OnLock();
                 }
-                OnLock();
-            }
-            if (TimesBought >= Max & Max > 0)
-            {
-                Locked = true;
-                MainUi.instance?.Close();
-                if(PopupScreen.instance != null)
+                if (TimesBought >= Max & Max > 0)
                 {
-                    PopupScreen.instance.ShowOkPopup("Max amount of this enhancement as been bought!");
+                    Locked = true;
+                    if (PopupScreen.instance != null)
+                    {
+                        PopupScreen.instance.ShowOkPopup("Max amount of this enhancement as been bought!");
+                    }
+                    OnLock();
                 }
-                OnLock();
+                ModSubmenu? submenu = null;
+
+                foreach (var submenu_ in GetContent<ModSubmenu>())
+                {
+                    if (submenu_.Info.Group == EnhancementGroup)
+                    {
+                        submenu = submenu_;
+                    }
+                }
+                if (submenu == null)
+                {
+                    submenu = GetContent<ModSubmenu>()[0];
+                }
+
+                MainUi.instance?.OpenSubmenu(tower, InGame.instance.uiRect, submenu, EnhancementGroup);
             }
         }
         /// <summary>
@@ -79,7 +115,7 @@ namespace EnhancementMonkey.Api.Enhancements
         /// Will return the new AttackModel
         /// </summary>
         /// <param name="atck">The attack model you'll like to modify.</param>
-        public AttackModel Apply(AttackModel atck)
+        public static AttackModel Apply(AttackModel atck)
         {
             foreach (var wpn in atck.weapons)
             {
@@ -87,7 +123,7 @@ namespace EnhancementMonkey.Api.Enhancements
                 {
                     if (enhancement.Modifies == ModifyType.Weapon)
                     {
-                        for(int i = 0; i < enhancement.TimesBought; i++)
+                        for (int i = 0; i < enhancement.TimesBought; i++)
                         {
                             enhancement.ModifyWeapon(wpn);
                         }
@@ -134,7 +170,7 @@ namespace EnhancementMonkey.Api.Enhancements
         /// Will return the nee WeaponModel
         /// </summary>
         /// <param name="wpn">the weapon model you'll like to apply</param>
-        public WeaponModel Apply(WeaponModel wpn)
+        public static WeaponModel Apply(WeaponModel wpn)
         {
             foreach (ModEnhancement enhancement in GetContent<ModEnhancement>())
             {
@@ -187,7 +223,7 @@ namespace EnhancementMonkey.Api.Enhancements
         /// How this enhancement modifies the tower. Ran if <see cref="Modifies"/> > <see cref="ModifyType.Other"/>
         /// </summary>
         /// <param name="tower">The Tower that the enhancement's being applied to.</param>
-        public virtual void ModifyTower(Tower tower)
+        public virtual void ModifyTower(Il2CppAssets.Scripts.Simulation.Towers.Tower tower)
         {
             var towerModel = tower.rootModel.Duplicate().Cast<TowerModel>();
             ModifyTower(towerModel);
@@ -213,7 +249,7 @@ namespace EnhancementMonkey.Api.Enhancements
         /// <param name="weaponModel">The WeaponModel that's being modified.</param>
         public virtual void ModifyWeapon(WeaponModel weaponModel)
         {
-            ModHelper.Warning<Main>("Enhancement " + EnhancementName + "doesn't change new weapons.");
+            Debug("Enhancement " + EnhancementName + "doesn't change new weapons.", LogLevel.Warn);
         }
         /// <summary>
         /// Use this to change a specific ProjectileModel
@@ -225,14 +261,13 @@ namespace EnhancementMonkey.Api.Enhancements
         /// <param name="projectileModel">The ProjectileModel that's being modified</param>
         public virtual void ModifyProjectile(ProjectileModel projectileModel)
         {
-            ModHelper.Warning<Main>("Enhancement " + EnhancementName + "doesn't change new projectiles.");
+            Debug("Enhancement " + EnhancementName + "doesn't change new projectiles.", LogLevel.Warn);
         }
         /// <summary>
         /// Do something special on lock.
         /// </summary>
         public virtual void OnLock()
         {
-
         }
 
         //UI
@@ -243,7 +278,7 @@ namespace EnhancementMonkey.Api.Enhancements
         /// <summary>
         /// What's shown in the menu.
         /// </summary>
-        public virtual string Description => "Applies " + EnhancementName + "To this tower";
+        public virtual string Description => "Applies " + EnhancementName + " To this tower";
         /// <summary>
         /// Name of the enhancement showed in the menu, by default the name of this mod content.
         /// </summary>
@@ -307,11 +342,26 @@ namespace EnhancementMonkey.Api.Enhancements
         // Misc
         /// <summary>
         /// Does this enhancement modify new weapons?
-        /// 
-        /// If set to true, override ModifyWeaponModel and modify the new weapon model there.
         /// </summary>
         public abstract ModifyType Modifies { get; }
 
+        /// <summary>
+        /// Is this enhancement locked by default?
+        /// </summary>
         public virtual bool LockedByDefault => false;
+
+        /// <summary>
+        /// If this ModEnhancement requires another mod. Set to null if it doesn't require another mod.
+        /// </summary>
+        public virtual string? ModID => null;
+
+        public bool HasDependencies = true;
+        /// <summary>
+        /// Use this for getting the actual base cost after the game mode has been chosen
+        /// </summary>
+        public int TrueBaseCost = 0;
+
+        public bool hitCamo = false;
+        public bool hitLead = false;
     }
 }

@@ -1,11 +1,4 @@
-﻿using BTD_Mod_Helper.Api.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace EnhancementMonkey.Api.Enhancements.Weapon
+﻿namespace EnhancementMonkey.Api.Enhancements.Weapon
 {
     internal class TwinGuns : WeaponEnhancement
     {
@@ -15,8 +8,8 @@ namespace EnhancementMonkey.Api.Enhancements.Weapon
 
         public override int BaseCost => 715;
 
-        public override EnhancementLevel EnhancementLevel => EnhancementLevel.Basic;
+        public override EnhancementLevel EnhancementLevel => EnhancementLevel.Good;
 
-        protected override string towerID => "MonkeySub-001";
+        protected override string TowerID => "MonkeySub-001";
     }
 }

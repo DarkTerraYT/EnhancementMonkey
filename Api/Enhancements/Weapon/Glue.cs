@@ -1,13 +1,4 @@
-﻿using BTD_Mod_Helper.Api.Enums;
-using Il2CppAssets.Scripts.Models.Towers.Behaviors.Attack;
-using Il2CppAssets.Scripts.Unity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace EnhancementMonkey.Api.Enhancements.Weapon
+﻿namespace EnhancementMonkey.Api.Enhancements.Weapon
 {
     internal class Glue : WeaponEnhancement
     {
@@ -19,6 +10,6 @@ namespace EnhancementMonkey.Api.Enhancements.Weapon
 
         public override EnhancementLevel EnhancementLevel => EnhancementLevel.Basic;
 
-        protected override string towerID => "GlueGunner";
+        protected override string TowerID => "GlueGunner";
     }
 }

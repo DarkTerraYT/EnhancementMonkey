@@ -1,15 +1,7 @@
-﻿using BTD_Mod_Helper.Api.Enums;
+﻿
 using BTD_Mod_Helper.Extensions;
-using EnhancementMonkey.Api.Enum;
 using Il2CppAssets.Scripts.Models.Towers;
-using Il2CppAssets.Scripts.Simulation.Towers;
 using Il2CppAssets.Scripts.Unity;
-using Il2CppAssets.Scripts.Unity.UI_New.InGame.AbilitiesMenu;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EnhancementMonkey.Api.Enhancements.Ability
 {
@@ -23,15 +15,13 @@ namespace EnhancementMonkey.Api.Enhancements.Ability
 
         public override bool LockAfterBuy => true;
 
-        public override int Priority => 0;
-
         public override EnhancementLevel EnhancementLevel => EnhancementLevel.Basic;
 
         public override ModifyType Modifies => ModifyType.Tower;
 
         public override EnhancementType EnhancementGroup => EnhancementType.Ability;
 
-        public override void ModifyTower(Tower tower)
+        public override void ModifyTower(Il2CppAssets.Scripts.Simulation.Towers.Tower tower)
         {
             var towerModel = tower.rootModel.Duplicate().Cast<TowerModel>();
 

@@ -1,11 +1,4 @@
-﻿using BTD_Mod_Helper.Api.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace EnhancementMonkey.Api.Enhancements.Weapon
+﻿namespace EnhancementMonkey.Api.Enhancements.Weapon
 {
     internal class Sniper : WeaponEnhancement
     {
@@ -17,6 +10,6 @@ namespace EnhancementMonkey.Api.Enhancements.Weapon
 
         public override EnhancementLevel EnhancementLevel => EnhancementLevel.Basic;
 
-        protected override string towerID => "SniperMonkey";
+        protected override string TowerID => "SniperMonkey";
     }
 }

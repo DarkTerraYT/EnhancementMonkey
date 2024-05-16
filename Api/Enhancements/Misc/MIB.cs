@@ -1,4 +1,4 @@
-﻿using BTD_Mod_Helper.Api.Enums;
+﻿
 using BTD_Mod_Helper.Extensions;
 using Il2CppAssets.Scripts.Models.Towers;
 using Il2CppAssets.Scripts.Models.Towers.Projectiles.Behaviors;
@@ -21,8 +21,12 @@ namespace EnhancementMonkey.Api.Enhancements.Misc
 
         public override ModifyType Modifies => ModifyType.Weapon;
 
+        public override bool LockAfterBuy => true;
+
         public override void ModifyOther()
         {
+            hitLead = true;
+
             MIB = true;
         }
 

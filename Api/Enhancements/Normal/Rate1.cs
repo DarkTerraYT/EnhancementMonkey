@@ -1,9 +1,8 @@
-﻿using BTD_Mod_Helper;
-using BTD_Mod_Helper.Api.Enums;
+﻿
+
 using BTD_Mod_Helper.Extensions;
 using Il2CppAssets.Scripts.Models.Towers;
 using Il2CppAssets.Scripts.Models.Towers.Weapons;
-using Il2CppAssets.Scripts.Simulation.Towers;
 using System;
 
 namespace EnhancementMonkey.Api.Enhancements.Normal
@@ -27,11 +26,11 @@ namespace EnhancementMonkey.Api.Enhancements.Normal
 
         public override uint Max => 5;
 
-        public override void ModifyTower(Tower tower)
+        public override void ModifyTower(Il2CppAssets.Scripts.Simulation.Towers.Tower tower)
         {
             var towerModel = tower.rootModel.Duplicate().Cast<TowerModel>();
 
-            foreach(var weapon in towerModel.GetWeapons())
+            foreach (var weapon in towerModel.GetWeapons())
             {
                 weapon.rate /= 1.1f;
             }
@@ -45,9 +44,9 @@ namespace EnhancementMonkey.Api.Enhancements.Normal
             {
                 weaponModel.rate /= 1.1f;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                ModHelper.Error<Main>(e);
+                Error<EnhancementMonkey>(e);
             }
         }
     }
