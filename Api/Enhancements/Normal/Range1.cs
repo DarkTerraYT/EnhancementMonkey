@@ -14,7 +14,7 @@ namespace EnhancementMonkey.Api.Enhancements.Normal
 
         public override int Priority => 1;
 
-        public override EnhancementLevel EnhancementLevel => EnhancementLevel.Basic;
+        public override EnhancementLevel NewEnhancementLevel => EnhancementLevel.Basic;
 
         public override EnhancementType EnhancementGroup => EnhancementType.Normal;
 

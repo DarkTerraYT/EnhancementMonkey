@@ -3,7 +3,7 @@ using Il2CppAssets.Scripts.Models.Towers;
 using Il2CppAssets.Scripts.Models.Towers.Behaviors.Attack;
 using Il2CppAssets.Scripts.Models.Towers.Filters;
 using Il2CppAssets.Scripts.Models.Towers.Projectiles.Behaviors;
-using Il2CppAssets.Scripts.Unity;
+
 using System;
 using System.Linq;
 
@@ -31,11 +31,11 @@ namespace EnhancementMonkey.Api.Enhancements.Weapon
 
             string[] vowels = ["a", "e", "i", "o", "u"];
 
-            if (EnhancementName.ToLower().Contains("the "))
+            if (EnhancementName.ToLower().Contains("the ") | EnhancementName[EnhancementName.Length - 1] == 's')
             {
                 description = "Gives the Enhancement Monkey " + EnhancementName;
             }
-            else if (vowels.Contains(EnhancementName[1].ToString().ToLower()))
+            else if (vowels.Contains(EnhancementName[0].ToString().ToLower()))
             {
                 description = "Gives the Enhancement Monkey an " + EnhancementName;
             }
@@ -46,15 +46,33 @@ namespace EnhancementMonkey.Api.Enhancements.Weapon
 
             return description;
         }
-
+        /// <summary>
+        /// Tower to get the attack model from
+        /// </summary>
         protected abstract string TowerID { get; }
+        /// <summary>
+        /// Attack model index
+        /// </summary>
         protected virtual int Index => 0;
-        protected virtual AttackModel AttackModel => Game.instance.model.GetTowerFromId(TowerID).GetAttackModel(Index).Duplicate();
+        private AttackModel AttackModel => Game.instance.model.GetTowerFromId(TowerID).GetAttackModel(Index).Duplicate();
+
+        /// <summary>
+        /// Ran before adding the attack model
+        /// </summary>
+        protected virtual void ModifyAddedAttackModel(AttackModel attackModel)
+        {
+
+        }
 
         protected override void ModifyTower(TowerModel towerModel)
         {
+            ModifyAddedAttackModel(AttackModel);
+
             var attackModel = Apply(AttackModel);
-            attackModel.range = towerModel.range;
+            if (!towerModel.isGlobalRange)
+            {
+                attackModel.range = towerModel.range;
+            }
 
             if (!Game.instance.model.GetTowerFromId(TowerID).GetDescendant<FilterInvisibleModel>().isActive)
             {

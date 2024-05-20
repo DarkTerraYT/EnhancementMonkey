@@ -1,7 +1,7 @@
 ﻿
 using BTD_Mod_Helper.Extensions;
 using Il2CppAssets.Scripts.Models.Towers;
-using Il2CppAssets.Scripts.Unity;
+
 
 namespace EnhancementMonkey.Api.Enhancements.Misc
 {
@@ -11,7 +11,7 @@ namespace EnhancementMonkey.Api.Enhancements.Misc
 
         public override int BaseCost => 315;
 
-        public override EnhancementLevel EnhancementLevel => EnhancementLevel.Basic;
+        public override EnhancementLevel NewEnhancementLevel => EnhancementLevel.Basic;
 
         public override EnhancementType EnhancementGroup => EnhancementType.Misc;
 
@@ -20,6 +20,8 @@ namespace EnhancementMonkey.Api.Enhancements.Misc
         protected override void ModifyTower(TowerModel towerModel)
         {
             var atck = Game.instance.model.GetTowerFromId("EngineerMonkey-100").GetAttackModel(1).Duplicate();
+
+            Apply(atck);
 
             atck.range = towerModel.range;
 

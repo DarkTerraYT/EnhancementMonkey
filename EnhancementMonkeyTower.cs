@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace EnhancementMonkey
 {
-    public class Tower : ModTower
+    public class EnhancementMonkeyTower : ModTower
     {
         public override TowerSet TowerSet => TowerSet.Primary;
 
@@ -34,7 +34,7 @@ namespace EnhancementMonkey
         public override int ShopTowerCount => 1;
     }
 
-    public class Display : ModTowerDisplay<Tower>
+    public class Display : ModTowerDisplay<EnhancementMonkeyTower>
     {
         public override string BaseDisplay => GetDisplay(TowerType.DartMonkey);
 

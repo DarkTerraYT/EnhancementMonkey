@@ -13,7 +13,7 @@ namespace EnhancementMonkey.Api.Enhancements.Misc
 
         public override int BaseCost => 8500;
 
-        public override EnhancementLevel EnhancementLevel => EnhancementLevel.Great;
+        public override EnhancementLevel NewEnhancementLevel => EnhancementLevel.Great;
 
         public override EnhancementType EnhancementGroup => EnhancementType.Misc;
 

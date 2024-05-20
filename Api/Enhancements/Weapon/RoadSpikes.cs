@@ -6,7 +6,7 @@
 
         public override int BaseCost => 700;
 
-        public override EnhancementLevel EnhancementLevel => EnhancementLevel.Basic;
+        public override EnhancementLevel NewEnhancementLevel => EnhancementLevel.Basic;
 
         protected override string TowerID => "SpikeFactory";
     }

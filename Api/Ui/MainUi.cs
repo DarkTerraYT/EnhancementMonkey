@@ -13,7 +13,7 @@ using UnityEngine;
 namespace EnhancementMonkey.Api.Ui
 {
     /// <summary>
-    /// If creating a mod for this, you shouldn't need to touch this class. Use MainUi.instance unless you're creating the main panel.
+    /// If creating a mod for this, you shouldn't need to touch this class. Use <see cref="instance"/> unless you're creating the main panel.
     /// </summary>
     [RegisterTypeInIl2Cpp(false)]
     public class MainUi : MonoBehaviour
@@ -105,7 +105,6 @@ namespace EnhancementMonkey.Api.Ui
                 return "Basic";
             }
         }
-
         public static void CreateMainPanel(List<ModSubmenu> submenus, Il2CppAssets.Scripts.Simulation.Towers.Tower tower)
         {
             RectTransform rect = InGame.instance.uiRect;
@@ -142,7 +141,7 @@ namespace EnhancementMonkey.Api.Ui
             {
                 instance.Close();
 
-                ModHelperPanel panel1 = rect.gameObject.AddModHelperPanel(new("Panel_Filter", rect.rect.center.x, rect.rect.center.y, 850, 1400), VanillaSprites.BrownInsertPanel);
+                ModHelperPanel panel1 = rect.gameObject.AddModHelperPanel(new("Panel_Filter", rect.rect.center.x, rect.rect.center.y, 850, 1620), VanillaSprites.BrownInsertPanel);
                 instance = panel1.AddComponent<MainUi>();
 
                 panel1.AddText(new("Text_Filters", panel1.RectTransform.rect.center.x, panel1.RectTransform.rect.bottom - 100, 850, 200), "Filters", 100);
@@ -167,7 +166,7 @@ namespace EnhancementMonkey.Api.Ui
                 float textX = panel1.RectTransform.rect.left + 200;
                 float buttonX = panel1.RectTransform.rect.left + 620;
 
-                ModHelperButton showUnlocksToggle = panel1.AddButton(new("Button_ShowUnlocks", panel1.RectTransform.rect.left + 620, 400, 360, 150), guid, new Action(() =>
+                ModHelperButton showUnlocksToggle = panel1.AddButton(new("Button_ShowUnlocks", panel1.RectTransform.rect.left + 620, 560, 360, 150), guid, new Action(() =>
                 {
                     ModHelperButton button = panel1.GetDescendent<ModHelperButton>("Button_ShowUnlocks");
 
@@ -183,11 +182,15 @@ namespace EnhancementMonkey.Api.Ui
                     }
                 }));
 
-                ModHelperText showUnlocksText = panel1.AddText(new("Text_ShowUnlocks", panel1.RectTransform.rect.left + 200, 400, 360, 150), "Show Unlocks?", 65);
+                ModHelperText showUnlocksText = panel1.AddText(new("Text_ShowUnlocks", panel1.RectTransform.rect.left + 200, 560, 360, 150), "Show Unlocks?", 65);
 
-                ModHelperText subTitle = panel1.AddText(new("Text_Level_Filters", 0, 250, 850, 100), "Level Filters", 70);
+                ModHelperText subTitle = panel1.AddText(new("Text_Level_Filters", 0, 410, 850, 100), "Level Filters", 80);
 
                 var enhancementLevels = System.Enum.GetValues(typeof(EnhancementLevel)).Cast<EnhancementLevel>().ToList();
+
+                int lowestLevelY = 5;
+
+                var seperatorLine_ = panel1.AddImage(new("Image_Seperator_Level_Unlocks", 0, 305, 850, 10), GetSpriteReference<EnhancementMonkey>("SeperatorLine").GUID);
 
                 for (int i = 0; i < enhancementLevels.Count; i++)
                 {
@@ -203,11 +206,14 @@ namespace EnhancementMonkey.Api.Ui
                     {
                         guid2 = redBtnCircle.GUID;
                     }
-                    int y = 125 - 120 * i + 1;
+                    int y = 245 - 120 * i;
+
+                    int seperatorY = y - 60;
+
+                    var seperatorLine = panel1.AddImage(new("Image_Seperator_" + name, 0, seperatorY, 850, 10), GetSpriteReference<EnhancementMonkey>("SeperatorLine").GUID);
 
 
-
-                    var title = panel1.AddText(new("Text_Option_Filter_" + name, textX, y, 360, 200), name, 50);
+                    var title = panel1.AddText(new("Text_Option_Filter_" + name, textX, y, 360, 200), name, 65);
 
                     ModHelperButton button1 = panel1.AddButton(new("Button_Filter_" + name, buttonX, y, 100), guid2, new Action(() =>
                     {
@@ -223,7 +229,21 @@ namespace EnhancementMonkey.Api.Ui
                             button.Image.SetSprite(greenBtnCircle);
                         }
                     }));
+
+                    lowestLevelY = seperatorY;
                 }
+
+                int minCostY = lowestLevelY - 110;
+
+                ModHelperInputField minCost = panel1.AddInputField(new("InputField_Min_Cost", buttonX, minCostY, 300, 100), "0", VanillaSprites.BlueInsertPanelRound, new Action<string>(input =>
+                {
+                    int value = int.Parse(input);
+
+                    ModSubmenu.MinShowCost = value;
+
+                }), 40, Il2CppTMPro.TMP_InputField.CharacterValidation.Integer);
+
+                ModHelperText minCostText = panel1.AddText(new("Text_Min_Cost", textX, minCostY, 360, 200), "Minimum Cost", 65);
 
             }));
 
@@ -237,8 +257,8 @@ namespace EnhancementMonkey.Api.Ui
             ModHelperPanel panel2 = ModHelperPanel.Create(new("EnhancementPanel_", -75, 0, width, height), GetSpriteReference<EnhancementMonkey>(EnhancementLevelName(enhancement)).GUID);
 
             var icon = panel2.AddImage(new("Icon_", 0, 75, 300), enhancement.Icon);
-            var name = panel2.AddText(new("Title_", 0, 330, width, 100), enhancement.EnhancementName);
-            var price = panel2.AddText(new("Cost_", 0, 290, width, 100), "$" + enhancement.Cost);
+            var name = panel2.AddText(new("Title_", 0, 320, width, 100), enhancement.EnhancementName, 50);
+            var price = panel2.AddText(new("Cost_", 0, 270, width, 100), "$" + enhancement.Cost);
             price.Text.color = Color.green;
 
             if (enhancement.hitCamo)
@@ -326,7 +346,7 @@ namespace EnhancementMonkey.Api.Ui
                                 enhancement.Added = true;
                                 if (DebugMode)
                                 {
-                                    Debug("Added Enhancement " + enhancement.EnhancementName, LogLevel.Info);
+                                    Debug("Added Enhancement " + enhancement.EnhancementName, LogLevel.Info, true);
                                 }
                             }
 
@@ -341,7 +361,7 @@ namespace EnhancementMonkey.Api.Ui
                                 enhancements_.Add(enhancement);
                                 if (DebugMode)
                                 {
-                                    Debug("Added Enhancement " + enhancement.EnhancementName, LogLevel.Info);
+                                    Debug("Added Enhancement " + enhancement.EnhancementName, LogLevel.Info, true);
                                 }
                             }
 
@@ -356,9 +376,9 @@ namespace EnhancementMonkey.Api.Ui
             float PanelWidth = width * 1.3f;
             float PanelHeight = height * 1.3f;
 
-            ModHelperScrollPanel panel = rect.gameObject.AddModHelperScrollPanel(new("Panel_", 1950, 1600, PanelWidth + 150, PanelHeight, new()), RectTransform.Axis.Vertical, VanillaSprites.BlueInsertPanel, 45, 100);
+            ModHelperScrollPanel panel = rect.gameObject.AddModHelperScrollPanel(new("Panel_", 2100, 1600, PanelWidth + 150, PanelHeight, new()), RectTransform.Axis.Vertical, VanillaSprites.BlueInsertPanel, 45, 100);
 
-            panel.AddScrollContent(ModHelperText.Create(new("Title_", 0, 500, PanelWidth, 160), submenu.Info.Name, 60)); // 
+            panel.AddScrollContent(ModHelperText.Create(new("Title_", 0, 500, PanelWidth, 160), submenu.Info.Name, 90)); // Title
 
             MainUi ui = panel.AddComponent<MainUi>();
 
@@ -375,17 +395,13 @@ namespace EnhancementMonkey.Api.Ui
 
             foreach (var enhancement in enhancements_)
             {
-                if (ModSubmenu.Filters[EnhancementLevelName(enhancement)])
+                if (ModSubmenu.Filters[EnhancementLevelName(enhancement)] & enhancement.BaseCost >= ModSubmenu.MinShowCost)
                 {
                     if (!(enhancement.Modifies == ModifyType.Unlock & !ModSubmenu.Filters["Unlocks"]))
                     {
                         panel.AddScrollContent(CreateEnhancementPanel(enhancement, width, height, tower));
                         addedInEnhancement = true;
                     }
-                }
-                if (!addedInEnhancement)
-                {
-
                 }
 
                 ModHelperButton exitButton = panel.AddButton(new("Button_Exit", PanelWidth, PanelHeight / 2, 500), VanillaSprites.ExitIcon, new Action(() =>
@@ -394,6 +410,10 @@ namespace EnhancementMonkey.Api.Ui
                     CreateMainPanel(GetContent<ModSubmenu>(), tower);
                 }));
 
+            }
+            if (!addedInEnhancement)
+            {
+                panel.AddText(new("Text_NoShownEnhancements", 0, 0, PanelWidth + 150, 300), "No Enhancements Found! \nTry changing filters?", 60);
             }
         }
     }

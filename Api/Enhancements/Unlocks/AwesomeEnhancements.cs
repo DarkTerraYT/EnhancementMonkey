@@ -6,17 +6,19 @@
 
         public override string Description => "Unlocks all Awesome Enhancements (Level 4)";
 
-        public override int BaseCost => 21000;
+        public override int BaseCost => 17500;
 
         public override int Priority => -2;
 
         public override bool LockAfterBuy => true;
 
-        public override EnhancementLevel EnhancementLevel => EnhancementLevel.Great;
+        public override EnhancementLevel NewEnhancementLevel => EnhancementLevel.Great;
 
         public override EnhancementType EnhancementGroup => EnhancementType.Misc;
 
         public override EnhancementLevel Background => EnhancementLevel.Awesome;
+
+        public override bool AutoEnhancementLevel => false;
 
         public override ModifyType Modifies => ModifyType.Unlock;
 

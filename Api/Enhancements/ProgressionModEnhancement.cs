@@ -13,8 +13,14 @@
 
         public override uint Max => 5;
 
+        public virtual bool SameEnhancementLevel => true;
+
         public sealed override void OnLock()
         {
+            if (SameEnhancementLevel)
+            {
+                EnhancementToUnlock.EnhancementLevel = EnhancementLevel;
+            }
             EnhancementToUnlock.Locked = false;
         }
     }

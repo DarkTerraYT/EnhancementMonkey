@@ -6,7 +6,7 @@
 
         public override int BaseCost => 400;
 
-        public override EnhancementLevel EnhancementLevel => EnhancementLevel.Basic;
+        public override EnhancementLevel NewEnhancementLevel => EnhancementLevel.Basic;
 
         protected override string TowerID => "IceMonkey-001";
     }

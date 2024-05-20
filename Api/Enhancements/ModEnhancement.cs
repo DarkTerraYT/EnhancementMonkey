@@ -1,5 +1,6 @@
 ﻿using BTD_Mod_Helper.Api;
 using BTD_Mod_Helper.Extensions;
+using EnhancementMonkey.Api.Enhancements.Unlocks;
 using EnhancementMonkey.Api.Enhancements.Weapon;
 using EnhancementMonkey.Api.Ui.Submenues;
 using Il2CppAssets.Scripts.Models.Towers;
@@ -43,7 +44,44 @@ namespace EnhancementMonkey.Api.Enhancements
                     Locked = true;
                     HasDependencies = false;
                     Debug("Enhancement with the ID " + Name + " Does not have the required mod with the ID " + ModID, LogLevel.Dependency);
+                    return;
                 }
+            }
+            if (AutoEnhancementLevel)
+            {
+                if (Modifies != ModifyType.Unlock)
+                {
+                    if (BaseCost < GetInstance<GoodEnhancements>().BaseCost * 0.9f)
+                    {
+                        EnhancementLevel = EnhancementLevel.Basic;
+                    }
+                    else if (BaseCost < GetInstance<GreatEnhancements>().BaseCost * 0.9f)
+                    {
+                        EnhancementLevel = EnhancementLevel.Good;
+                    }
+                    else if (BaseCost < GetInstance<AwesomeEnhancements>().BaseCost * 0.9f)
+                    {
+                        EnhancementLevel = EnhancementLevel.Great;
+                    }
+                    else if (BaseCost < GetInstance<GodlyEnhancements>().BaseCost * 0.9f)
+                    {
+                        EnhancementLevel = EnhancementLevel.Awesome;
+                    }
+                    else if (BaseCost < GetInstance<PureEnhancements>().BaseCost * 0.9f)
+                    {
+                        EnhancementLevel = EnhancementLevel.Godly;
+                    }
+                    else if (BaseCost >= GetInstance<PureEnhancements>().BaseCost * 0.9f)
+                    {
+                        EnhancementLevel = EnhancementLevel.Pure;
+                    }
+
+                    Debug($"Set enhancement {Name}'s Enhancement Level to {EnhancementLevel}", LogLevel.Info, true);
+                }
+            }
+            else
+            {
+                EnhancementLevel = NewEnhancementLevel;
             }
         }
 
@@ -54,7 +92,7 @@ namespace EnhancementMonkey.Api.Enhancements
         /// 
         /// To apply this enhancement to a particular weapon use <see cref="ModifyWeapon(WeaponModel)"/> 
         /// </summary>
-        /// <param name="tower">The Tower that the enhancement's being applied to.</param>
+        /// <param name="tower">The EnhancementMonkeyTower that the enhancement's being applied to.</param>
         public void ApplyEnhancement(Il2CppAssets.Scripts.Simulation.Towers.Tower tower)
         {
             if (ModID != null & !ModHelper.HasMod(ModID))
@@ -71,24 +109,6 @@ namespace EnhancementMonkey.Api.Enhancements
                 ModifyOther();
                 AbilityMenu.instance.AbilitiesChanged();
 
-                if (LockAfterBuy)
-                {
-                    Locked = true;
-                    if (PopupScreen.instance != null)
-                    {
-                        PopupScreen.instance.ShowOkPopup("Max amount of this enhancement as been bought!");
-                    }
-                    OnLock();
-                }
-                if (TimesBought >= Max & Max > 0)
-                {
-                    Locked = true;
-                    if (PopupScreen.instance != null)
-                    {
-                        PopupScreen.instance.ShowOkPopup("Max amount of this enhancement as been bought!");
-                    }
-                    OnLock();
-                }
                 ModSubmenu? submenu = null;
 
                 foreach (var submenu_ in GetContent<ModSubmenu>())
@@ -98,12 +118,32 @@ namespace EnhancementMonkey.Api.Enhancements
                         submenu = submenu_;
                     }
                 }
-                if (submenu == null)
-                {
-                    submenu = GetContent<ModSubmenu>()[0];
-                }
+                submenu ??= GetContent<ModSubmenu>()[0];
 
-                MainUi.instance?.OpenSubmenu(tower, InGame.instance.uiRect, submenu, EnhancementGroup);
+                if (LockAfterBuy)
+                {
+                    Locked = true;
+                    if (PopupScreen.instance != null)
+                    {
+                        PopupScreen.instance.ShowOkPopup("Max amount of this enhancement as been bought!");
+                    }
+
+                    OnLock();
+
+                    MainUi.instance?.OpenSubmenu(tower, InGame.instance.uiRect, submenu, EnhancementGroup);
+                }
+                if (TimesBought >= Max & Max > 0)
+                {
+                    Locked = true;
+                    if (PopupScreen.instance != null)
+                    {
+                        PopupScreen.instance.ShowOkPopup("Max amount of this enhancement as been bought!");
+                    }
+
+                    OnLock();
+
+                    MainUi.instance?.OpenSubmenu(tower, InGame.instance.uiRect, submenu, EnhancementGroup);
+                }
             }
         }
         /// <summary>
@@ -222,7 +262,7 @@ namespace EnhancementMonkey.Api.Enhancements
         /// <summary>
         /// How this enhancement modifies the tower. Ran if <see cref="Modifies"/> > <see cref="ModifyType.Other"/>
         /// </summary>
-        /// <param name="tower">The Tower that the enhancement's being applied to.</param>
+        /// <param name="tower">The EnhancementMonkeyTower that the enhancement's being applied to.</param>
         public virtual void ModifyTower(Il2CppAssets.Scripts.Simulation.Towers.Tower tower)
         {
             var towerModel = tower.rootModel.Duplicate().Cast<TowerModel>();
@@ -331,9 +371,15 @@ namespace EnhancementMonkey.Api.Enhancements
         /// </summary>
         public virtual int Priority => 1;
         /// <summary>
-        /// The larger priority, changes the enhancement's color. Also makes it locked behind certain upgrades if the setting is turned on.
+        /// The larger priority, changes the enhancement's color. Also makes it locked behind certain upgrades if the setting is turned on. Only used if Automatic Enhancement Level is set to false.
         /// </summary>
-        public abstract EnhancementLevel EnhancementLevel { get; }
+        public virtual EnhancementLevel NewEnhancementLevel => EnhancementLevel.Basic;
+
+        /// <summary>
+        /// Enhancement Level of the enhancement, basic before loading.
+        /// </summary>
+        public EnhancementLevel EnhancementLevel = EnhancementLevel.Basic;
+
         /// <summary>
         /// Which submenu to put it in (normal is stat)
         /// </summary>
@@ -354,6 +400,12 @@ namespace EnhancementMonkey.Api.Enhancements
         /// If this ModEnhancement requires another mod. Set to null if it doesn't require another mod.
         /// </summary>
         public virtual string? ModID => null;
+
+
+        /// <summary>
+        /// Does the mod automatically set the enhancement level based on the price?
+        /// </summary>
+        public virtual bool AutoEnhancementLevel => true;
 
         public bool HasDependencies = true;
         /// <summary>

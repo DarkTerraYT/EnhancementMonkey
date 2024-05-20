@@ -12,9 +12,11 @@
 
         public override bool LockAfterBuy => true;
 
-        public override EnhancementLevel EnhancementLevel => EnhancementLevel.Basic;
+        public override EnhancementLevel NewEnhancementLevel => EnhancementLevel.Basic;
 
         public override EnhancementType EnhancementGroup => EnhancementType.Misc;
+
+        public override bool AutoEnhancementLevel => false;
 
         public override EnhancementLevel Background => EnhancementLevel.Good;
 

@@ -20,7 +20,7 @@ namespace EnhancementMonkey.Api.Enhancements.Normal
 
         public override bool LockedByDefault => true;
 
-        public override EnhancementLevel EnhancementLevel => EnhancementLevel.Basic;
+        public override EnhancementLevel NewEnhancementLevel => EnhancementLevel.Basic;
 
         public override ModifyType Modifies => ModifyType.Projectile;
 

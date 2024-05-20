@@ -8,7 +8,7 @@
 
         public override int BaseCost => 235;
 
-        public override EnhancementLevel EnhancementLevel => EnhancementLevel.Basic;
+        public override EnhancementLevel NewEnhancementLevel => EnhancementLevel.Basic;
 
         protected override string TowerID => "SniperMonkey";
     }

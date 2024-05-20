@@ -8,7 +8,7 @@
 
         public override int BaseCost => 315;
 
-        public override EnhancementLevel EnhancementLevel => EnhancementLevel.Basic;
+        public override EnhancementLevel NewEnhancementLevel => EnhancementLevel.Basic;
 
         protected override string TowerID => "TackShooter-001";
     }

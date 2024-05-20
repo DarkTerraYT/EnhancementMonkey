@@ -1,7 +1,7 @@
 ﻿
 using BTD_Mod_Helper.Extensions;
 using Il2CppAssets.Scripts.Models.Towers;
-using Il2CppAssets.Scripts.Unity;
+
 
 namespace EnhancementMonkey.Api.Enhancements.Ability
 {
@@ -15,7 +15,7 @@ namespace EnhancementMonkey.Api.Enhancements.Ability
 
         public override bool LockAfterBuy => true;
 
-        public override EnhancementLevel EnhancementLevel => EnhancementLevel.Basic;
+        public override EnhancementLevel NewEnhancementLevel => EnhancementLevel.Great;
 
         public override ModifyType Modifies => ModifyType.Tower;
 

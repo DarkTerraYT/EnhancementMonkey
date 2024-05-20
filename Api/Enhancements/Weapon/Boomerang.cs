@@ -10,7 +10,7 @@
 
         public override int Priority => 1;
 
-        public override EnhancementLevel EnhancementLevel => EnhancementLevel.Basic;
+        public override EnhancementLevel NewEnhancementLevel => EnhancementLevel.Basic;
 
         protected override string TowerID => "BoomerangMonkey";
     }

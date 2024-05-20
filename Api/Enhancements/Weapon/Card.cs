@@ -13,7 +13,7 @@ namespace EnhancementMonkey.Api.Enhancements.Weapon
 
         public override int BaseCost => 210;
 
-        public override EnhancementLevel EnhancementLevel => EnhancementLevel.Basic;
+        public override EnhancementLevel NewEnhancementLevel => EnhancementLevel.Basic;
 
         public override EnhancementType EnhancementGroup => EnhancementType.Weapon;
 

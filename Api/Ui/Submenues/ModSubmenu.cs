@@ -23,5 +23,7 @@ namespace EnhancementMonkey.Api.Ui.Submenues
             ["Pure"] = true,
             ["Hidden"] = false
         };
+
+        public static int MinShowCost = 0;
     }
 }
