@@ -10,6 +10,7 @@
         <DebugType>embedded</DebugType>
     </PropertyGroup>
     <ItemGroup>
+      <None Remove="Assets\Textures\Icon - Copy.png" />
       <None Remove="BrownInsertPanelLight.png" />
       <None Remove="TowerContainerParagonBottom.png" />
     </ItemGroup>
