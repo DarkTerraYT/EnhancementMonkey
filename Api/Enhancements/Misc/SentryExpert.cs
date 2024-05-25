@@ -20,6 +20,7 @@ namespace EnhancementMonkey.Api.Enhancements.Misc
         protected override void ModifyTower(TowerModel towerModel)
         {
             var atck = Game.instance.model.GetTowerFromId("EngineerMonkey-400").GetAttackModel(1).Duplicate();
+            atck.name += Name + "Enhancement";
 
             Apply(atck);
 

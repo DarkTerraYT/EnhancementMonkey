@@ -1,12 +1,12 @@
 ﻿namespace EnhancementMonkey.Api.Enhancements.Unlocks
 {
-    public class AwesomeEnhancements : ModEnhancement
+    public class AwesomeEnhancements : UpgradeEnhancement
     {
         public override string Icon => VanillaSprites.UpgradeIcon;
 
         public override string Description => "Unlocks all Awesome Enhancements (Level 4)";
 
-        public override int BaseCost => 17500;
+        public override int BaseCost => 15500;
 
         public override int Priority => -2;
 

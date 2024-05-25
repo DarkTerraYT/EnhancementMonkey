@@ -21,9 +21,14 @@ namespace EnhancementMonkey.Api.Ui.Submenues
             ["Awesome"] = true,
             ["Godly"] = true,
             ["Pure"] = true,
+            ["Paragon"] = true,
             ["Hidden"] = false
         };
 
         public static int MinShowCost = 0;
+
+        protected override int Order => Info.Priority;
+
+        public virtual string EmptyText => "No Enhancements Found!\nTry changing filters?";
     }
 }

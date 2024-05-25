@@ -1,19 +1,21 @@
 ﻿using BTD_Mod_Helper.Extensions;
+using Il2CppAssets.Scripts.Models.Towers;
+using Il2CppAssets.Scripts.Models.Towers.Behaviors.Attack;
 using Il2CppAssets.Scripts.Models.Towers.Filters;
 using Il2CppAssets.Scripts.Models.Towers.Projectiles.Behaviors;
-using Il2CppAssets.Scripts.Models.Towers;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace EnhancementMonkey.Api.Enhancements.Weapon
 {
-    internal class Mortar : WeaponEnhancement
+    internal class Blooncineration : ModEnhancement
     {
-        public override string Icon => VanillaSprites.BiggerBlastUpgradeIcon;
+        public override string Icon => VanillaSprites.BurnyStuffUpgradeIcon;
 
-        public override int BaseCost => 400;
-
-        public override EnhancementLevel NewEnhancementLevel => EnhancementLevel.Basic;
-
-        protected override string TowerID => "MortarMonkey";
+        public override int BaseCost => 51400;
 
         public override EnhancementType EnhancementGroup => EnhancementType.Weapon;
 
@@ -24,13 +26,13 @@ namespace EnhancementMonkey.Api.Enhancements.Weapon
             var atck = Game.instance.model.GetTowerFromId("DartMonkey").GetAttackModel();
             atck.RemoveWeapon(atck.weapons[0]);
 
-            var newWpn = Game.instance.model.GetTowerFromId("MortarMonkey").GetWeapon();
+            var newWpn = Game.instance.model.GetTowerFromId("MortarMonkey-204").GetWeapon();
             atck.AddWeapon(newWpn);
 
             atck.range = towerModel.range;
             Apply(atck);
 
-            if (!Game.instance.model.GetTowerFromId("MortarMonkey").GetDescendant<FilterInvisibleModel>().isActive)
+            if (!Game.instance.model.GetTowerFromId("MortarMonkey-204").GetDescendant<FilterInvisibleModel>().isActive)
             {
                 hitCamo = true;
             }

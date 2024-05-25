@@ -1,5 +1,6 @@
 ﻿using BTD_Mod_Helper.Api;
 using BTD_Mod_Helper.Extensions;
+using EnhancementMonkey.Api.Enhancements.Paragon;
 using EnhancementMonkey.Api.Enhancements.Unlocks;
 using EnhancementMonkey.Api.Enhancements.Weapon;
 using EnhancementMonkey.Api.Ui.Submenues;
@@ -29,14 +30,25 @@ namespace EnhancementMonkey.Api.Enhancements
 
         public static List<ModEnhancement> Enhancements = GetContent<ModEnhancement>();
 
+        public static Dictionary<EnhancementType, int> EnhancementsInType = new()
+        {
+            [EnhancementType.Normal] = 0,
+            [EnhancementType.Weapon] = 0,
+            [EnhancementType.Ability] = 0,
+            [EnhancementType.Misc] = 0,
+            [EnhancementType.Paragon] = 0
+        };
+
         public sealed override int RegisterPerFrame => EnhancementsLoadedPerFrame;
 
         // Methods
         public sealed override void Register()
         {
+            // Set Defaults
             Cost = BaseCost;
             Locked = LockedByDefault;
 
+            // Check for dependencies
             if (!ModHelper.HasMod(ModID) & ModID != null)
             {
                 if (ModID != null)
@@ -47,6 +59,8 @@ namespace EnhancementMonkey.Api.Enhancements
                     return;
                 }
             }
+
+            // Set Enhancement Level
             if (AutoEnhancementLevel)
             {
                 if (Modifies != ModifyType.Unlock)
@@ -95,6 +109,7 @@ namespace EnhancementMonkey.Api.Enhancements
         /// <param name="tower">The EnhancementMonkeyTower that the enhancement's being applied to.</param>
         public void ApplyEnhancement(Il2CppAssets.Scripts.Simulation.Towers.Tower tower)
         {
+            // Check for dependiencies
             if (ModID != null & !ModHelper.HasMod(ModID))
             {
                 Debug("Enhancement with the ID " + Name + " Does not have the required mod with the ID " + ModID, LogLevel.Dependency);
@@ -102,13 +117,15 @@ namespace EnhancementMonkey.Api.Enhancements
             }
             else
             {
+                // Check if modifies tower
                 if (Modifies > ModifyType.Unlock)
                 {
                     ModifyTower(tower);
                 }
                 ModifyOther();
-                AbilityMenu.instance.AbilitiesChanged();
+                AbilityMenu.instance.AbilitiesChanged(); // Update Ability Menu
 
+                // Get current open submenu
                 ModSubmenu? submenu = null;
 
                 foreach (var submenu_ in GetContent<ModSubmenu>())
@@ -119,7 +136,7 @@ namespace EnhancementMonkey.Api.Enhancements
                     }
                 }
                 submenu ??= GetContent<ModSubmenu>()[0];
-
+                // Check if locked
                 if (LockAfterBuy)
                 {
                     Locked = true;
@@ -143,6 +160,30 @@ namespace EnhancementMonkey.Api.Enhancements
                     OnLock();
 
                     MainUi.instance?.OpenSubmenu(tower, InGame.instance.uiRect, submenu, EnhancementGroup);
+                }
+                // Check to see if any paragon enhancements have been unlocked
+                foreach (var enhancement in GetContent<ParagonEnhancement>())
+                {
+                    List<ModEnhancement> missingEnhancements = [];
+
+                    foreach (var reqEnhancement in enhancement.RequiredEnhancements)
+                    {
+                        if (!BoughtEnhancements.Contains(reqEnhancement))
+                        {
+                            missingEnhancements.Add(reqEnhancement);
+                            Debug("Paragon enhancement " + enhancement.Name + " is missing enhancement " + reqEnhancement.Name, LogLevel.Info);
+                        }
+                    }
+
+                    enhancement.HasRequirements = missingEnhancements.Count == 0;
+
+                    if (enhancement.HasRequirements & enhancement.HasDependencies & UnlockedLevels.Contains(enhancement.EnhancementLevel))
+                    {
+                        if (PopupScreen.instance != null && enhancement.HasDependencies)
+                        {
+                            PopupScreen.instance.ShowOkPopup(enhancement.UnlockText);
+                        }
+                    }
                 }
             }
         }
@@ -415,5 +456,17 @@ namespace EnhancementMonkey.Api.Enhancements
 
         public bool hitCamo = false;
         public bool hitLead = false;
+
+        public static Dictionary<EnhancementLevel, string> EnhancementLevelNames = new()
+        {
+            [EnhancementLevel.Basic] = "Basic",
+            [EnhancementLevel.Good] = "Good",
+            [EnhancementLevel.Great] = "Great",
+            [EnhancementLevel.Awesome] = "Awesome",
+            [EnhancementLevel.Godly] = "Godly",
+            [EnhancementLevel.Pure] = "Pure",
+            [EnhancementLevel.Paragon] = "Paragon",
+            [EnhancementLevel.Hidden] = "Hidden",
+        };
     }
 }

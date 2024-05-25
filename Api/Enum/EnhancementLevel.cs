@@ -8,6 +8,7 @@
         Awesome,
         Godly,
         Pure,
+        Paragon,
         Hidden
     }
 }

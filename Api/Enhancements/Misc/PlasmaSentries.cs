@@ -19,6 +19,8 @@ namespace EnhancementMonkey.Api.Enhancements.Misc
         {
             var atck = Game.instance.model.GetTowerFromId("EngineerMonkey-500").GetAttackModel(1).Duplicate();
 
+            atck.name += Name + "Enhancement";
+            
             Apply(atck);
 
             atck.range = towerModel.range;

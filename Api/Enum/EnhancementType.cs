@@ -9,6 +9,7 @@
         Weapon,
         Ability,
         Misc,
-        Hide
+        Paragon,
+        Hide,
     }
 }

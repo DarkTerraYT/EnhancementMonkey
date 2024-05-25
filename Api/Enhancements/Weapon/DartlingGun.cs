@@ -4,7 +4,7 @@
     {
         public override string Icon => VanillaSprites.FocusedFiringUpgradeIcon;
 
-        public override int BaseCost => 500;
+        public override int BaseCost => 850;
 
         public override EnhancementLevel NewEnhancementLevel => EnhancementLevel.Basic;
 

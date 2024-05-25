@@ -1,6 +1,7 @@
 using BTD_Mod_Helper.Api.ModOptions;
 using BTD_Mod_Helper.Extensions;
 using EnhancementMonkey;
+using EnhancementMonkey.Api.Enhancements.Paragon;
 using EnhancementMonkey.Api.Ui.Submenues;
 using Il2CppAssets.Scripts.Models;
 using Il2CppAssets.Scripts.Simulation;
@@ -14,16 +15,22 @@ using static Il2CppAssets.Scripts.Simulation.Simulation;
 
 [assembly: MelonInfo(typeof(EnhancementMonkey.EnhancementMonkey), ModHelperData.Name, ModHelperData.Version, ModHelperData.RepoOwner)]
 [assembly: MelonGame("Ninja Kiwi", "BloonsTD6")]
-[assembly: MelonOptionalDependencies("CardMonkey")]
+[assembly: MelonOptionalDependencies("CardMonkey", "BananaFarmParagon")]
 
 namespace EnhancementMonkey;
 
 public class EnhancementMonkey : BloonsTD6Mod
 {
     public static bool MIB = false;
-
     public static bool MonkeyTown = false;
 
+    public static List<ModEnhancement> BoughtEnhancements = [];
+    /// <summary>
+    /// Logs a certain thing if <see cref="DebugMode"/> and the minimum log level is at least this log level
+    /// </summary>
+    /// <param name="message">What to log</param>
+    /// <param name="level">Log level</param>
+    /// <param name="clutter">does this get logged a lot/not very helpful</param>
     public static void Debug(object message, LogLevel level, bool clutter = false)
     {
         if (DebugMode && level <= DebugLevel)
@@ -68,11 +75,7 @@ public class EnhancementMonkey : BloonsTD6Mod
 
     public static bool menuOpen = false;
 
-    public static List<EnhancementLevel> UnlockedLevels = [EnhancementLevel.Basic];
-
-    public static List<ModEnhancement> NormalEnhancements = [];
-
-    public static List<ModSubmenu> EnhancementSubmenus = [];
+    public static List<EnhancementLevel> UnlockedLevels = [EnhancementLevel.Paragon, EnhancementLevel.Basic];
 
     public static readonly ModSettingCategory Debuging = new("Debuging")
     { icon = VanillaSprites.AdvancedIntelUpgradeIcon };
@@ -129,6 +132,12 @@ public class EnhancementMonkey : BloonsTD6Mod
         requiresRestart = true
     };
 
+    /*public static readonly ModSettingBool ParagonsUnlocked = new(false)
+    {
+        icon = VanillaSprites.ParagonIcon,
+        description = "Are all paragon enhancements pre-unlocked?"
+    };*/
+
     public static readonly ModSettingInt EnhancementsLoadedPerFrame = new(200)
     {
         description = "How many enhancements to load per frame during loading, change this number if there's a lot of enhancements to load. Maxes at 1000/frame. \n\nOnly affects when the game first loads",
@@ -175,6 +184,10 @@ public class EnhancementMonkey : BloonsTD6Mod
                     enhancement.Locked = true;
                 }
             }
+        }
+        foreach(var pEnhancement in GetContent<ParagonEnhancement>())
+        {
+            pEnhancement.HasRequirements = false;
         }
         MIB = false;
         MonkeyTown = false;

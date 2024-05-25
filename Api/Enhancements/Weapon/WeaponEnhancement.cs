@@ -5,6 +5,7 @@ using Il2CppAssets.Scripts.Models.Towers.Filters;
 using Il2CppAssets.Scripts.Models.Towers.Projectiles.Behaviors;
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace EnhancementMonkey.Api.Enhancements.Weapon
@@ -54,6 +55,12 @@ namespace EnhancementMonkey.Api.Enhancements.Weapon
         /// Attack model index
         /// </summary>
         protected virtual int Index => 0;
+
+        /// <summary>
+        /// Does it add every attack model from that tower?
+        /// </summary>
+        protected virtual bool AddAll => false;
+
         private AttackModel AttackModel => Game.instance.model.GetTowerFromId(TowerID).GetAttackModel(Index).Duplicate();
 
         /// <summary>
@@ -64,29 +71,68 @@ namespace EnhancementMonkey.Api.Enhancements.Weapon
 
         }
 
+        /// <summary>
+        /// Ran before adding the new attack models (only used if <see cref="AddAll"/> == true)
+        /// </summary>
+        protected virtual void ModifyAddedAttackModel(List<AttackModel> attackModels)
+        {
+
+        }
+
         protected override void ModifyTower(TowerModel towerModel)
         {
-            ModifyAddedAttackModel(AttackModel);
+            if (!AddAll)
+            {
+                ModifyAddedAttackModel(AttackModel);
 
-            var attackModel = Apply(AttackModel);
-            if (!towerModel.isGlobalRange)
-            {
-                attackModel.range = towerModel.range;
-            }
-
-            if (!Game.instance.model.GetTowerFromId(TowerID).GetDescendant<FilterInvisibleModel>().isActive)
-            {
-                hitCamo = true;
-            }
-            attackModel.GetDescendants<DamageModel>().ForEach(dmgModel =>
-            {
-                if (dmgModel.immuneBloonProperties != Il2Cpp.BloonProperties.Lead)
+                var attackModel = Apply(AttackModel);
+                if (!towerModel.isGlobalRange)
                 {
-                    hitLead = true;
+                    attackModel.range = towerModel.range;
                 }
-            });
 
-            towerModel.AddBehavior(attackModel);
+                if (!Game.instance.model.GetTowerFromId(TowerID).GetDescendant<FilterInvisibleModel>().isActive)
+                {
+                    hitCamo = true;
+                }
+                attackModel.GetDescendants<DamageModel>().ForEach(dmgModel =>
+                {
+                    if (dmgModel.immuneBloonProperties != Il2Cpp.BloonProperties.Lead)
+                    {
+                        hitLead = true;
+                    }
+                });
+
+                towerModel.AddBehavior(attackModel);
+            }
+            else
+            {
+                List<AttackModel> attackModels = Game.instance.model.GetTowerFromId(TowerID).GetAttackModels().Duplicate();
+                ModifyAddedAttackModel(attackModels);
+
+                foreach(var attackModel in attackModels) 
+                {
+                    var attackModel_ = Apply(attackModel);
+                    if (!towerModel.isGlobalRange)
+                    {
+                        attackModel_.range = towerModel.range;
+                    }
+
+                    if (!Game.instance.model.GetTowerFromId(TowerID).GetDescendant<FilterInvisibleModel>().isActive)
+                    {
+                        hitCamo = true;
+                    }
+                    attackModel_.GetDescendants<DamageModel>().ForEach(dmgModel =>
+                    {
+                        if (dmgModel.immuneBloonProperties != Il2Cpp.BloonProperties.Lead)
+                        {
+                            hitLead = true;
+                        }
+                    });
+
+                    towerModel.AddBehavior(attackModel_);
+                }
+            }
         }
     }
 }

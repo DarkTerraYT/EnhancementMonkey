@@ -4,7 +4,7 @@
     {
         public override string Icon => VanillaSprites.EliteDefenderUpgradeIcon;
 
-        public override int BaseCost => 1;
+        public override int BaseCost => 22735;
         protected override string TowerID => "SniperMonkey-025";
     }
 }

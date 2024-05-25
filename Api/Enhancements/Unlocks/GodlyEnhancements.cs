@@ -1,12 +1,12 @@
 ﻿namespace EnhancementMonkey.Api.Enhancements.Unlocks
 {
-    public class GodlyEnhancements : ModEnhancement
+    public class GodlyEnhancements : UpgradeEnhancement
     {
         public override string Icon => VanillaSprites.UpgradeIcon;
 
         public override string Description => "Unlocks all Godly Enhancements (Level 5)";
 
-        public override int BaseCost => 55000;
+        public override int BaseCost => 35000;
 
         public override int Priority => -1;
 

@@ -1,6 +1,6 @@
 ﻿namespace EnhancementMonkey.Api.Enhancements.Unlocks
 {
-    public class GoodEnhancements : ModEnhancement
+    public class GoodEnhancements : UpgradeEnhancement
     {
         public override string Icon => VanillaSprites.UpgradeIcon;
 
@@ -13,8 +13,6 @@
         public override bool LockAfterBuy => true;
 
         public override EnhancementLevel NewEnhancementLevel => EnhancementLevel.Basic;
-
-        public override EnhancementType EnhancementGroup => EnhancementType.Misc;
 
         public override bool AutoEnhancementLevel => false;
 

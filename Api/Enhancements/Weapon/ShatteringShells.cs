@@ -2,18 +2,21 @@
 using Il2CppAssets.Scripts.Models.Towers.Filters;
 using Il2CppAssets.Scripts.Models.Towers.Projectiles.Behaviors;
 using Il2CppAssets.Scripts.Models.Towers;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace EnhancementMonkey.Api.Enhancements.Weapon
 {
-    internal class Mortar : WeaponEnhancement
+    internal class ShatteringShells : WeaponEnhancement
     {
-        public override string Icon => VanillaSprites.BiggerBlastUpgradeIcon;
+        public override string Icon => VanillaSprites.ShatteringShellsUpgradeIcon;
 
-        public override int BaseCost => 400;
+        public override int BaseCost => 12400;
 
-        public override EnhancementLevel NewEnhancementLevel => EnhancementLevel.Basic;
-
-        protected override string TowerID => "MortarMonkey";
+        protected override string TowerID => "MortarMonkey-204";
 
         public override EnhancementType EnhancementGroup => EnhancementType.Weapon;
 
@@ -24,13 +27,13 @@ namespace EnhancementMonkey.Api.Enhancements.Weapon
             var atck = Game.instance.model.GetTowerFromId("DartMonkey").GetAttackModel();
             atck.RemoveWeapon(atck.weapons[0]);
 
-            var newWpn = Game.instance.model.GetTowerFromId("MortarMonkey").GetWeapon();
+            var newWpn = Game.instance.model.GetTowerFromId("MortarMonkey-205").GetWeapon();
             atck.AddWeapon(newWpn);
 
             atck.range = towerModel.range;
             Apply(atck);
 
-            if (!Game.instance.model.GetTowerFromId("MortarMonkey").GetDescendant<FilterInvisibleModel>().isActive)
+            if (!Game.instance.model.GetTowerFromId("MortarMonkey-205").GetDescendant<FilterInvisibleModel>().isActive)
             {
                 hitCamo = true;
             }

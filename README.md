@@ -5,10 +5,10 @@
 
 <h1 align="center">Enhancement Monkey</h1>
 
-Mod that takes ideas from Ancient Monkey and Ascended Upgrades and puts it into one tower.
+Replaces the RNG from ancient monkey with strategy and puts it into it's own tower
 
 
 This mod uses templates to make adding enhancements easier. This is for sake of time, and also making the mod easier to modify. 
-For info on how to use these templates check out [the wiki!](about:blank)
+For info on how to use these templates check out [the wiki!](https://github.com/DarkTerraYT/EnhancementMonkey/wiki)
 
 [![Requires BTD6 Mod Helper](https://raw.githubusercontent.com/gurrenm3/BTD-Mod-Helper/master/banner.png)](https://github.com/gurrenm3/BTD-Mod-Helper#readme)

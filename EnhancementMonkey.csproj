@@ -10,9 +10,16 @@
         <DebugType>embedded</DebugType>
     </PropertyGroup>
     <ItemGroup>
+      <None Remove="BrownInsertPanelLight.png" />
+      <None Remove="TowerContainerParagonBottom.png" />
+    </ItemGroup>
+    <ItemGroup>
         <Content Include=".github\workflows\build.yml" />
     </ItemGroup>
     <ItemGroup>
+      <Reference Include="BananaFarmParagon">
+        <HintPath>Optional Dependencies\BananaFarmParagon.dll</HintPath>
+      </Reference>
       <Reference Include="CardMonkey">
         <HintPath>Optional Dependencies\CardMonkey.dll</HintPath>
       </Reference>
