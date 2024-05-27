@@ -54,25 +54,6 @@ public class EnhancementMonkey : BloonsTD6Mod
             }
         }
     }
-
-    public static string Space(string string_)
-    {
-        if (string.IsNullOrWhiteSpace(string_))
-            return "";
-        StringBuilder newString = new(string_.Length * 2);
-
-        for (int i = 0; i < string_.Length; i++)
-        {
-            if ((char.IsUpper(string_, i) | char.IsNumber(string_, i)) & i > 0)
-            {
-                newString.Append(' ');
-            }
-            newString.Append(string_[i]);
-        }
-
-        return newString.ToString();
-    }
-
     public static bool menuOpen = false;
 
     public static List<EnhancementLevel> UnlockedLevels = [EnhancementLevel.Paragon, EnhancementLevel.Basic];

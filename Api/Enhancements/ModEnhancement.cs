@@ -9,6 +9,7 @@ using Il2CppAssets.Scripts.Models.Towers.Behaviors.Attack;
 using Il2CppAssets.Scripts.Models.Towers.Projectiles;
 using Il2CppAssets.Scripts.Models.Towers.Projectiles.Behaviors;
 using Il2CppAssets.Scripts.Models.Towers.Weapons;
+using Il2CppAssets.Scripts.Simulation.Towers;
 using Il2CppAssets.Scripts.Unity.UI_New.InGame;
 using Il2CppAssets.Scripts.Unity.UI_New.InGame.AbilitiesMenu;
 using Il2CppAssets.Scripts.Unity.UI_New.Popups;
@@ -122,6 +123,15 @@ namespace EnhancementMonkey.Api.Enhancements
                 {
                     ModifyTower(tower);
                 }
+
+                foreach(var enhancement in GetContent<ModEnhancement>()) 
+                {
+                    if(enhancement.Modifies >= ModifyType.Tower) 
+                    {
+                        ModifyTowerOnNewEnhancement(tower);
+                    }
+                }
+
                 ModifyOther();
                 AbilityMenu.instance.AbilitiesChanged(); // Update Ability Menu
 
@@ -313,6 +323,14 @@ namespace EnhancementMonkey.Api.Enhancements
         }
 
         /// <summary>
+        /// Use when your enhancement changes something in a tower that might change when a new enhancement is bought
+        /// </summary>
+        /// <param name="tower">Tower to apply to</param>
+        public virtual void ModifyTowerOnNewEnhancement(Tower tower) 
+        {
+        }
+
+        /// <summary>
         /// How this enhancement modifies the tower. Ran if <code>Modifies > <see cref="ModifyType.Other"/></code>
         /// </summary>
         /// <param name="towerModel">The TowerModel that the enhancement's being applied to.</param>
@@ -363,7 +381,7 @@ namespace EnhancementMonkey.Api.Enhancements
         /// <summary>
         /// Name of the enhancement showed in the menu, by default the name of this mod content.
         /// </summary>
-        public virtual string EnhancementName => Space(Name);
+        public virtual string EnhancementName => Name.Spaced();
         /// <summary>
         /// Which enhancement level background to show for this tower. By default the original EnhancementLevel.
         /// </summary>

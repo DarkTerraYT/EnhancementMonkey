@@ -4,6 +4,7 @@ using Il2CppAssets.Scripts.Models.Towers;
 using Il2CppAssets.Scripts.Models.Towers.Filters;
 using Il2CppAssets.Scripts.Models.Towers.Projectiles;
 using Il2CppAssets.Scripts.Models.Towers.Weapons;
+using Il2CppAssets.Scripts.Simulation.Towers;
 
 namespace EnhancementMonkey.Api.Enhancements.Misc
 {
@@ -38,6 +39,11 @@ namespace EnhancementMonkey.Api.Enhancements.Misc
         public override void ModifyWeapon(WeaponModel weaponModel)
         {
             weaponModel.GetDescendants<ProjectileModel>().ForEach(proj => proj.SetHitCamo(true));
+        }
+
+        public override void ModifyTowerOnNewEnhancement(Tower tower)
+        {
+            tower.towerModel.GetDescendants<FilterInvisibleModel>().ForEach(mod => mod.isActive = false);
         }
     }
 }
