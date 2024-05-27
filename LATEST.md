@@ -1,1 +1,1 @@
-Release
+Fix Camo Enhancement not working on new weapons
