@@ -9,5 +9,7 @@
         public override string EnhancementName => "Miam MOAB";
 
         protected override string TowerID => "SniperMonkey-420";
+
+        protected override bool ChangeRange => false;
     }
 }

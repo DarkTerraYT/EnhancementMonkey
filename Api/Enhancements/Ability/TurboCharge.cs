@@ -11,7 +11,7 @@ namespace EnhancementMonkey.Api.Enhancements.Ability
 
         public override string Description => "Gives the Turbocharge Ability";
 
-        public override int BaseCost => 5500;
+        public override int BaseCost => 55000;
 
         public override bool LockAfterBuy => true;
 

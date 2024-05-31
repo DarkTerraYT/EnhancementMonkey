@@ -128,10 +128,7 @@ public class EnhancementMonkey : BloonsTD6Mod
         min = 200
     };
 
-    public static readonly ModSettingCategory GUI = new("GUI")
-    {
-        icon = VanillaSprites.BlueInsertPanel
-    };
+    public static readonly ModSettingCategory GUI = new("GUI");
 
     public static readonly ModSettingDouble PanelHeightMultiplier = new(2.5f)
     {
@@ -140,7 +137,7 @@ public class EnhancementMonkey : BloonsTD6Mod
         category = GUI
     };
 
-    public static readonly ModSettingDouble PanelWidthMultiplier = new(1.3f)
+    public static readonly ModSettingDouble PanelWidthMultiplier = new(1.4f)
     {
         description = "How many times wider the submenu panels are compared to how wide an enhancement details panel is. Small values may make the menu look cramped, and large values may block the screen.",
         min = 0.5,

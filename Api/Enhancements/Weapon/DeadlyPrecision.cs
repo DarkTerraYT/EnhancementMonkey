@@ -6,6 +6,7 @@
 
         public override int BaseCost => 4975;
 
-        protected override string TowerID => "SniperMonkey-300";
+        protected override string TowerID => "SniperMonkey-300"; 
+        protected override bool ChangeRange => false;
     }
 }

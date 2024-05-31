@@ -61,6 +61,8 @@ namespace EnhancementMonkey.Api.Enhancements.Weapon
         /// </summary>
         protected virtual bool AddAll => false;
 
+        protected virtual bool ChangeRange => true;
+
         private AttackModel AttackModel => Game.instance.model.GetTowerFromId(TowerID).GetAttackModel(Index).Duplicate();
 
         /// <summary>
@@ -86,22 +88,10 @@ namespace EnhancementMonkey.Api.Enhancements.Weapon
                 ModifyAddedAttackModel(AttackModel);
 
                 var attackModel = Apply(AttackModel);
-                if (!towerModel.isGlobalRange)
+                if (ChangeRange)
                 {
                     attackModel.range = towerModel.range;
                 }
-
-                if (!Game.instance.model.GetTowerFromId(TowerID).GetDescendant<FilterInvisibleModel>().isActive)
-                {
-                    hitCamo = true;
-                }
-                attackModel.GetDescendants<DamageModel>().ForEach(dmgModel =>
-                {
-                    if (dmgModel.immuneBloonProperties != Il2Cpp.BloonProperties.Lead)
-                    {
-                        hitLead = true;
-                    }
-                });
 
                 towerModel.AddBehavior(attackModel);
             }

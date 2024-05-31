@@ -1,1 +1,1 @@
-Bug fixes, gui enhancements and more weapons
+Bug fixes, gui enhancements and more enhancements

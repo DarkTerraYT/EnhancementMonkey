@@ -326,8 +326,8 @@ namespace EnhancementMonkey.Api.Ui
             var name = panel2.AddText(new("Title_", 0, 320, width, 100), enhancement.EnhancementName, 65);
             var price = panel2.AddText(new("Cost_", 0, 270, width, 100), "$" + enhancement.Cost, 55);
 
-            price.Text.autoSizeTextContainer = true;
-            name.Text.autoSizeTextContainer = true;
+            price.Text.fontSizeMin = 10;
+            price.Text.fontSizeMax = 55;
 
             price.Text.color = Color.green;
 
@@ -341,7 +341,8 @@ namespace EnhancementMonkey.Api.Ui
             }
 
             var desc = panel2.AddText(new("Description_", 0, -100, width * .9616f, height / 2 - 50), enhancement.Description, 55);
-            desc.Text.autoSizeTextContainer = true;
+            desc.Text.fontSizeMin = 10;
+            desc.Text.fontSizeMax = 55;
 
             ModHelperButton buyButton = panel2.AddButton(new("EnhancementPanel_", 0, -300, width / 1.33f, height / 5), VanillaSprites.BlueBtnLong, new Action(() =>
             {
@@ -482,8 +483,9 @@ namespace EnhancementMonkey.Api.Ui
 
             ModHelperScrollPanel panel = rect.gameObject.AddModHelperScrollPanel(new("Panel_", PanelX, PanelY, PanelWidth, PanelHeight, new()), RectTransform.Axis.Vertical, VanillaSprites.BlueInsertPanel, 45, 100);
 
-            var title =  panel.AddText(new("Title_", 0, panel.RectTransform.rect.bottom - 100, PanelWidth, 160), submenu.Info.Name, 110); // Title
-            title.Text.autoSizeTextContainer = true;
+            var title =  panel.AddText(new("Title_", 0, panel.RectTransform.rect.bottom - 100, PanelWidth, 160), submenu.Info.Name, 100); // Title
+            title.Text.fontSizeMin = 90;
+            title.Text.fontSizeMax = 100;
 
 
             MainUi ui = panel.AddComponent<MainUi>();
@@ -498,7 +500,7 @@ namespace EnhancementMonkey.Api.Ui
 
             bool addedInEnhancement = false;
 
-
+            int enhancementsAdded = 0;
 
             foreach (var enhancement in enhancements_)
             {
@@ -508,10 +510,20 @@ namespace EnhancementMonkey.Api.Ui
                     {
                         panel.AddScrollContent(CreateEnhancementPanel(enhancement, width, height, tower));
                         addedInEnhancement = true;
+                        enhancementsAdded++;
                     }
                 }
 
             }
+
+            if(enhancementsAdded >= 70) 
+            {
+                if(PopupScreen.instance != null) 
+                {
+                    PopupScreen.instance.ShowOkPopup("70+ Enhancements have loaded! You might be noticing some lag when opening this submenu. Adjusting filters can improve submenu opening speeds.");
+                }
+            }
+
             if (!addedInEnhancement)
             {
                 panel.AddText(new("Text_NoShownEnhancements", 0, 0, PanelWidth + 150, 300), submenu.EmptyText, 60);

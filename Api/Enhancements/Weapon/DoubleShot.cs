@@ -8,7 +8,7 @@ namespace EnhancementMonkey.Api.Enhancements.Weapon
 {
     internal class DoubleShot : WeaponEnhancement
     {
-        public override string Icon => VanillaSprites.DoubleShotUpgradeIcon;
+        public override string Icon => VanillaSprites.DoubleShotUpgradeIcon2;
 
         public override int BaseCost => 1900;
 

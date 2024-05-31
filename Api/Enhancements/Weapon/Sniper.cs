@@ -11,5 +11,7 @@
         public override EnhancementLevel NewEnhancementLevel => EnhancementLevel.Basic;
 
         protected override string TowerID => "SniperMonkey";
+
+        protected override bool ChangeRange => false;
     }
 }
