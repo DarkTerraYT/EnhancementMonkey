@@ -128,7 +128,11 @@ namespace EnhancementMonkey.Api.Enhancements
                 {
                     if(enhancement.Modifies >= ModifyType.Tower) 
                     {
-                        ModifyTowerOnNewEnhancement(tower);
+                        var towerModel = tower.rootModel.Duplicate().Cast<TowerModel>();
+
+                        ModifyTowerOnNewEnhancement(towerModel);
+
+                        tower.UpdateRootModel(towerModel);
                     }
                 }
 
@@ -326,7 +330,7 @@ namespace EnhancementMonkey.Api.Enhancements
         /// Use when your enhancement changes something in a tower that might change when a new enhancement is bought
         /// </summary>
         /// <param name="tower">Tower to apply to</param>
-        public virtual void ModifyTowerOnNewEnhancement(Tower tower) 
+        public virtual void ModifyTowerOnNewEnhancement(TowerModel towerModel) 
         {
         }
 
@@ -485,6 +489,6 @@ namespace EnhancementMonkey.Api.Enhancements
             [EnhancementLevel.Pure] = "Pure",
             [EnhancementLevel.Paragon] = "Paragon",
             [EnhancementLevel.Hidden] = "Hidden",
-        };
+        }; 
     }
 }

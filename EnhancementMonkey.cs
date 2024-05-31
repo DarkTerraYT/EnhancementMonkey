@@ -8,8 +8,10 @@ using Il2CppAssets.Scripts.Simulation;
 using Il2CppAssets.Scripts.Simulation.Objects;
 using Il2CppAssets.Scripts.Simulation.Towers;
 using Il2CppAssets.Scripts.Unity.UI_New.InGame;
+using Il2CppAssets.Scripts.Unity.UI_New.Popups;
 using MelonLoader;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using static Il2CppAssets.Scripts.Simulation.Simulation;
 
@@ -126,11 +128,37 @@ public class EnhancementMonkey : BloonsTD6Mod
         min = 200
     };
 
-    class enhancementFilter(string id, bool value)
+    public static readonly ModSettingCategory GUI = new("GUI")
     {
-        public string ID = id;
-        public bool Value = value;
-    }
+        icon = VanillaSprites.BlueInsertPanel
+    };
+
+    public static readonly ModSettingDouble PanelHeightMultiplier = new(2.5f)
+    {
+        description = "How many times taller the submenu panels are compared to how tall an enhancement details panel is. Small values may make the menu look cramped, and large values may break the game.",
+        min = 0.5,
+        category = GUI
+    };
+
+    public static readonly ModSettingDouble PanelWidthMultiplier = new(1.3f)
+    {
+        description = "How many times wider the submenu panels are compared to how wide an enhancement details panel is. Small values may make the menu look cramped, and large values may block the screen.",
+        min = 0.5,
+        category = GUI
+    };
+
+    public static readonly ModSettingInt PanelX = new(2100)
+    {
+        description = "Horizontal location on screen",
+        category = GUI
+    };
+
+    public static readonly ModSettingInt PanelY = new(1600)
+    {
+        description = "Vertical location on screen",
+        category = GUI
+    };
+
 
     /// <summary>
     /// Clears everything.
@@ -181,6 +209,8 @@ public class EnhancementMonkey : BloonsTD6Mod
         {
             ModSubmenu.Filters[name] = true;
         }
+
+
     }
 
     public override void OnCashAdded(double amount, Simulation.CashType from, int cashIndex, Simulation.CashSource source, Tower tower)

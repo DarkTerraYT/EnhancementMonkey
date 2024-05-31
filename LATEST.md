@@ -1,1 +1,1 @@
-Fix Camo Enhancement not working on new weapons
+Bug fixes, gui enhancements and more weapons

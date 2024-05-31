@@ -15,6 +15,8 @@ namespace EnhancementMonkey.Api.Enhancements.Ability
 
         public override uint Max => 2;
 
+        public override string Description => base.Description + " (Monkey Nomics)";
+
         protected override void ModifyTower(TowerModel towerModel)
         {
             towerModel.AddBehavior(Game.instance.model.GetTowerFromId("BananaFarm-050").GetAbility().Duplicate());

@@ -8,6 +8,7 @@
         <LangVersion>latest</LangVersion>
         <Optimize>False</Optimize>
         <DebugType>embedded</DebugType>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
     <ItemGroup>
       <None Remove="Assets\Textures\Icon - Copy.png" />

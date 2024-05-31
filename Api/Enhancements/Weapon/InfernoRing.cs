@@ -9,5 +9,7 @@
         public override EnhancementLevel NewEnhancementLevel => EnhancementLevel.Godly;
 
         protected override string TowerID => "TackShooter-502";
+
+        protected override bool AddAll => true;
     }
 }

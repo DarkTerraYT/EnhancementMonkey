@@ -14,7 +14,7 @@
 
         public override EnhancementLevel NewEnhancementLevel => EnhancementLevel.Great;
 
-        public override EnhancementType EnhancementGroup => EnhancementType.Misc;
+        public override EnhancementType EnhancementGroup => EnhancementType.Hide;
 
         public override EnhancementLevel Background => EnhancementLevel.Awesome;
 

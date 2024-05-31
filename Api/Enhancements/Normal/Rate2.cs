@@ -11,7 +11,7 @@ namespace EnhancementMonkey.Api.Enhancements.Normal
     {
         public override string Icon => VanillaSprites.FasterShootingUpgradeIcon2;
 
-        public override string Description => "Makes each weapon shoot 25% faster";
+        public override string Description => "Makes each weapon shoot 20% faster";
 
         public override int BaseCost => 2500;
 
@@ -34,7 +34,7 @@ namespace EnhancementMonkey.Api.Enhancements.Normal
 
             foreach (var weapon in towerModel.GetWeapons())
             {
-                weapon.rate /= 1.25f;
+                weapon.rate /= 1.2f;
             }
 
             tower.UpdateRootModel(towerModel);

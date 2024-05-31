@@ -41,9 +41,9 @@ namespace EnhancementMonkey.Api.Enhancements.Misc
             weaponModel.GetDescendants<ProjectileModel>().ForEach(proj => proj.SetHitCamo(true));
         }
 
-        public override void ModifyTowerOnNewEnhancement(Tower tower)
+        public override void ModifyTowerOnNewEnhancement(TowerModel towerModel)
         {
-            tower.towerModel.GetDescendants<FilterInvisibleModel>().ForEach(mod => mod.isActive = false);
+            towerModel.GetDescendants<FilterInvisibleModel>().ForEach(mod => mod.isActive = false);
         }
     }
 }

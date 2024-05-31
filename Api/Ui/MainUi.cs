@@ -323,8 +323,12 @@ namespace EnhancementMonkey.Api.Ui
             ModHelperPanel panel2 = ModHelperPanel.Create(new("EnhancementPanel_", -75, 0, width, height), GetSpriteReference<EnhancementMonkey>(ModEnhancement.EnhancementLevelNames[enhancement.Background]).GUID);
 
             var icon = panel2.AddImage(new("Icon_", 0, 75, 300), enhancement.Icon);
-            var name = panel2.AddText(new("Title_", 0, 320, width, 100), enhancement.EnhancementName, 50);
-            var price = panel2.AddText(new("Cost_", 0, 270, width, 100), "$" + enhancement.Cost);
+            var name = panel2.AddText(new("Title_", 0, 320, width, 100), enhancement.EnhancementName, 65);
+            var price = panel2.AddText(new("Cost_", 0, 270, width, 100), "$" + enhancement.Cost, 55);
+
+            price.Text.autoSizeTextContainer = true;
+            name.Text.autoSizeTextContainer = true;
+
             price.Text.color = Color.green;
 
             if (enhancement.hitCamo)
@@ -336,7 +340,8 @@ namespace EnhancementMonkey.Api.Ui
                 panel2.AddImage(new("Image_Camo", width - 100, 300, 80), VanillaSprites.LeadBloonIcon);
             }
 
-            var desc = panel2.AddText(new("Description_", 0, -100, width * .9616f, height / 2 - 50), enhancement.Description);
+            var desc = panel2.AddText(new("Description_", 0, -100, width * .9616f, height / 2 - 50), enhancement.Description, 55);
+            desc.Text.autoSizeTextContainer = true;
 
             ModHelperButton buyButton = panel2.AddButton(new("EnhancementPanel_", 0, -300, width / 1.33f, height / 5), VanillaSprites.BlueBtnLong, new Action(() =>
             {
@@ -391,7 +396,7 @@ namespace EnhancementMonkey.Api.Ui
             return panel2;
         }
 
-        public void OpenSubmenu(Il2CppAssets.Scripts.Simulation.Towers.Tower tower, RectTransform rect, ModSubmenu submenu, EnhancementType group)
+        public void OpenSubmenu(Tower tower, RectTransform rect, ModSubmenu submenu, EnhancementType group)
         {
             instance?.Close();
 
@@ -472,12 +477,14 @@ namespace EnhancementMonkey.Api.Ui
             float width = 680;
             float height = 780;
 
-            float PanelWidth = width * 1.3f;
-            float PanelHeight = height * 1.3f;
+            float PanelWidth = width * PanelWidthMultiplier;
+            float PanelHeight = height * PanelHeightMultiplier;
 
-            ModHelperScrollPanel panel = rect.gameObject.AddModHelperScrollPanel(new("Panel_", 2100, 1600, PanelWidth + 150, PanelHeight, new()), RectTransform.Axis.Vertical, VanillaSprites.BlueInsertPanel, 45, 100);
+            ModHelperScrollPanel panel = rect.gameObject.AddModHelperScrollPanel(new("Panel_", PanelX, PanelY, PanelWidth, PanelHeight, new()), RectTransform.Axis.Vertical, VanillaSprites.BlueInsertPanel, 45, 100);
 
-            var title =  panel.AddText(new("Title_", 0, 400, PanelWidth, 160), submenu.Info.Name, 90); // Title
+            var title =  panel.AddText(new("Title_", 0, panel.RectTransform.rect.bottom - 100, PanelWidth, 160), submenu.Info.Name, 110); // Title
+            title.Text.autoSizeTextContainer = true;
+
 
             MainUi ui = panel.AddComponent<MainUi>();
 
@@ -503,12 +510,6 @@ namespace EnhancementMonkey.Api.Ui
                         addedInEnhancement = true;
                     }
                 }
-
-                ModHelperButton exitButton = panel.AddButton(new("Button_Exit", PanelWidth, PanelHeight / 2, 500), VanillaSprites.ExitIcon, new Action(() =>
-                {
-                    instance.Close();
-                    CreateMainPanel(GetContent<ModSubmenu>(), tower);
-                }));
 
             }
             if (!addedInEnhancement)

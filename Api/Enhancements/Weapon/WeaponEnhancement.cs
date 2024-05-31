@@ -13,7 +13,7 @@ namespace EnhancementMonkey.Api.Enhancements.Weapon
     /// <summary>
     /// Makes it quicker to add a <see cref="Il2CppAssets.Scripts.Models.Towers.Behaviors.Attack.AttackModel"/> with a <see cref="ModEnhancement"/>. Cannot be both a <see cref="WeaponEnhancement"/> and a <see cref="ProgressionModEnhancement"/> at the same time.
     /// </summary>
-    abstract class WeaponEnhancement : ModEnhancement
+    public abstract class WeaponEnhancement : ModEnhancement
     {
         public override EnhancementType EnhancementGroup => EnhancementType.Weapon;
 

@@ -13,7 +13,9 @@ namespace EnhancementMonkey.Api.Enhancements.Ability
 
         public override ModifyType Modifies => ModifyType.Tower;
 
-        public override uint Max => 5;
+        public override uint Max => 1;
+
+        public override string Description => base.Description + " (IMF Loan)";
 
         protected override void ModifyTower(TowerModel towerModel)
         {
