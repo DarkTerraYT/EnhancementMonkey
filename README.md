@@ -9,7 +9,7 @@ Replaces the RNG from ancient monkey with strategy and puts it into it's own tow
 
 
 This mod uses templates to make adding enhancements easier. This is for sake of time, and also making the mod easier to modify. 
-For info on how to use these templates check out [the wiki!](https://github.com/DarkTerraYT/EnhancementMonkey/wiki)
+For info on how to use these templates check out [the wiki!](https://github.com/DarkTerraYT/EnhancementMonkey/wiki), you may also ask in my [discord server](https://discord.gg/xegnVEBRuE)
 
 <h1 aling="left"><img alt="GitHub all releases" height="25" src="https://img.shields.io/github/downloads/DarkTerraYT/EnhancementMonkey/total?label=Total%20Dowloads"></h1>
 
