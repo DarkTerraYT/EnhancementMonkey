@@ -20,7 +20,9 @@ namespace EnhancementMonkey.Api.Enhancements.Normal
 
         public override ModifyType Modifies => ModifyType.Tower;
 
-        public override uint Max => 5;
+        public override string EnhancementName => "Range 1";
+
+        public override uint Max => 6;
 
         public override void ModifyTower(Il2CppAssets.Scripts.Simulation.Towers.Tower tower)
         {

@@ -16,6 +16,8 @@ namespace EnhancementMonkey.Api.Enhancements.Normal
 
         public override int Priority => 0;
 
+        public override string EnhancementName => "Pierce 1";
+
         public override uint Max => 8;
 
         public override EnhancementLevel NewEnhancementLevel => EnhancementLevel.Basic;

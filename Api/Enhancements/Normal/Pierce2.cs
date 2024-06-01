@@ -20,6 +20,8 @@ namespace EnhancementMonkey.Api.Enhancements.Normal
 
         public override EnhancementLevel NewEnhancementLevel => EnhancementLevel.Basic;
 
+        public override string EnhancementName => "Pierce 2";
+
         public override ModifyType Modifies => ModifyType.Projectile;
 
         public override bool LockedByDefault => true;

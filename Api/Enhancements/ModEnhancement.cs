@@ -136,6 +136,8 @@ namespace EnhancementMonkey.Api.Enhancements
                     }
                 }
 
+                Cost *= (int)(Cost * CostMultiplier);
+
                 ModifyOther();
                 AbilityMenu.instance.AbilitiesChanged(); // Update Ability Menu
 

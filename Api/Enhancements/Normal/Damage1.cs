@@ -18,6 +18,8 @@ namespace EnhancementMonkey.Api.Enhancements.Normal
 
         public override string Description => "Increases damage by 1";
 
+        public override string EnhancementName => "Damage 1";
+
         public override float CostMultiplier => 1.5f;
 
         public override EnhancementType EnhancementGroup => EnhancementType.Normal;

@@ -18,6 +18,8 @@ namespace EnhancementMonkey.Api.Enhancements.Normal
         public override int Priority => 0;
         public override float CostMultiplier => 1;
 
+        public override string EnhancementName => "Rate 2";
+
         public override EnhancementLevel NewEnhancementLevel => EnhancementLevel.Good;
 
         public override EnhancementType EnhancementGroup => EnhancementType.Normal;

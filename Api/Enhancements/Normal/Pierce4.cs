@@ -16,9 +16,13 @@ namespace EnhancementMonkey.Api.Enhancements.Normal
 
         public override int Priority => 0;
 
+        public override uint Max => 50;
+
         public override EnhancementLevel NewEnhancementLevel => EnhancementLevel.Basic;
 
         public override ModifyType Modifies => ModifyType.Projectile;
+
+        public override string EnhancementName => "Pierce 4";
 
         public override bool LockedByDefault => true;
 

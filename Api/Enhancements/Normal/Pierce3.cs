@@ -22,6 +22,8 @@ namespace EnhancementMonkey.Api.Enhancements.Normal
 
         public override EnhancementLevel NewEnhancementLevel => EnhancementLevel.Basic;
 
+        public override string EnhancementName => "Pierce 3";
+
         public override ModifyType Modifies => ModifyType.Projectile;
 
         public override void ModifyTower(Il2CppAssets.Scripts.Simulation.Towers.Tower tower)

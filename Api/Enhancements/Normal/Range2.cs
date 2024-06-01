@@ -14,7 +14,11 @@ namespace EnhancementMonkey.Api.Enhancements.Normal
 
         public override float CostMultiplier => 1.75f;
 
+        public override uint Max => 7;
+
         public override int Priority => 1;
+
+        public override string EnhancementName => "Range 2";
 
         public override EnhancementLevel NewEnhancementLevel => EnhancementLevel.Basic;
 

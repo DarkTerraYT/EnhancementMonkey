@@ -18,11 +18,15 @@ namespace EnhancementMonkey.Api.Enhancements.Normal
 
         public override string Description => "Increases damage by 2";
 
+        public override string EnhancementName => "Damage 2";
+
         public override float CostMultiplier => 1.5f;
 
         public override EnhancementType EnhancementGroup => EnhancementType.Normal;
 
         public override ModifyType Modifies => ModifyType.Weapon;
+
+        public override bool LockedByDefault => true;
 
         protected override void ModifyTower(TowerModel towerModel)
         {
