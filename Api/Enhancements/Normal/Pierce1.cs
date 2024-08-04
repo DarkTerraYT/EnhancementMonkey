@@ -41,7 +41,7 @@ namespace EnhancementMonkey.Api.Enhancements.Normal
 
         public override void ModifyProjectile(ProjectileModel projectileModel)
         {
-            projectileModel.pierce = 1;
+            projectileModel.pierce += 1;
         }
 
         public override EnhancementType EnhancementGroup => EnhancementType.Normal;
