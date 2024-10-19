@@ -12,7 +12,7 @@ namespace EnhancementMonkey.Api.Enhancements.Normal
 
         public override int BaseCost => 1000;
 
-        public override LockedByDefault => true;
+        public override bool LockedByDefault => true;
 
         public override float CostMultiplier => 1.75f;
 

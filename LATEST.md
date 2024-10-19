@@ -1,1 +1,1 @@
-Bug fixes, gui enhancements and more enhancements
+Bug fixes, fix for v45, greatly improve submenu loading.

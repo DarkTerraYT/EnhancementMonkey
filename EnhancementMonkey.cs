@@ -10,6 +10,7 @@ using Il2CppAssets.Scripts.Simulation.Towers;
 using Il2CppAssets.Scripts.Unity.UI_New.InGame;
 using Il2CppAssets.Scripts.Unity.UI_New.Popups;
 using MelonLoader;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -56,6 +57,7 @@ public class EnhancementMonkey : BloonsTD6Mod
             }
         }
     }
+
     public static bool menuOpen = false;
 
     public static List<EnhancementLevel> UnlockedLevels = [EnhancementLevel.Paragon, EnhancementLevel.Basic];
@@ -110,7 +112,7 @@ public class EnhancementMonkey : BloonsTD6Mod
 
     public static readonly ModSettingBool ShowBuyPopups = new(false)
     {
-        icon = VanillaSprites.WarningSign2,
+        icon = VanillaSprites.WarningSign,
         description = "Does a popup show saying you bought the enhancement after buying the enhancement? (Super annoying so false by default)",
         requiresRestart = true
     };

@@ -2,7 +2,7 @@
 {
     internal class Boomerang : WeaponEnhancement
     {
-        public override string Icon => VanillaSprites.Boomerang2;
+        public override string Icon => VanillaSprites.FasterRangsUpgradeIcon;
 
         public override string Description => "Gives the Enhancement Monkey a Boomerang";
 

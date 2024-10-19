@@ -163,7 +163,7 @@ namespace EnhancementMonkey.Api.Enhancements
 
                     OnLock();
 
-                    MainUi.instance?.OpenSubmenu(tower, InGame.instance.uiRect, submenu, EnhancementGroup);
+                    MainUi.instance?.OpenSubmenu(InGame.instance.uiRect, submenu, EnhancementGroup);
                 }
                 if (TimesBought >= Max & Max > 0)
                 {
@@ -175,7 +175,7 @@ namespace EnhancementMonkey.Api.Enhancements
 
                     OnLock();
 
-                    MainUi.instance?.OpenSubmenu(tower, InGame.instance.uiRect, submenu, EnhancementGroup);
+                    MainUi.instance?.OpenSubmenu(InGame.instance.uiRect, submenu, EnhancementGroup);
                 }
                 // Check to see if any paragon enhancements have been unlocked
                 foreach (var enhancement in GetContent<ParagonEnhancement>())

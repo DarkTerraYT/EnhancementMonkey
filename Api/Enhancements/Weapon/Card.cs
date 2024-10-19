@@ -7,7 +7,7 @@ namespace EnhancementMonkey.Api.Enhancements.Weapon
 {
     internal class Card : ModEnhancement
     {
-        public override string Icon => GetSpriteReference<CardMonkeyMod>("CutTheDeck-Icon").GUID;
+        public override string Icon => GetSpriteReference<CardMonkeyMod>("CutTheDeck-Icon").AssetGUID;
 
         public override string? ModID => "CardMonkey";
 
