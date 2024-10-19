@@ -1,7 +1,7 @@
 ﻿
 
 using BTD_Mod_Helper.Extensions;
-using Il2CppAssets.Scripts.Models.Towers;
+using EnhancementMonkey.Api.Ui.Submenues;using Il2CppAssets.Scripts.Models.Towers;
 using Il2CppAssets.Scripts.Models.Towers.Weapons;
 using System;
 
@@ -20,9 +20,9 @@ namespace EnhancementMonkey.Api.Enhancements.Normal
 
         public override string EnhancementName => "Rate 1";
 
-        public override EnhancementLevel NewEnhancementLevel => EnhancementLevel.Good;
+        public override EnhancementLevel EnhancementLevel => EnhancementLevel.Good;
 
-        public override EnhancementType EnhancementGroup => EnhancementType.Normal;
+        public override ModSubmenu Submenu => ModSubmenu.Normal;
 
         public override ModifyType Modifies => ModifyType.Weapon;
 

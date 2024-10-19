@@ -8,11 +8,8 @@ using Il2CppAssets.Scripts.Simulation;
 using Il2CppAssets.Scripts.Simulation.Objects;
 using Il2CppAssets.Scripts.Simulation.Towers;
 using Il2CppAssets.Scripts.Unity.UI_New.InGame;
-using Il2CppAssets.Scripts.Unity.UI_New.Popups;
 using MelonLoader;
 using System.Collections.Generic;
-using System.IO;
-using System.Text;
 using static Il2CppAssets.Scripts.Simulation.Simulation;
 
 [assembly: MelonInfo(typeof(EnhancementMonkey.EnhancementMonkey), ModHelperData.Name, ModHelperData.Version, ModHelperData.RepoOwner)]
@@ -21,11 +18,35 @@ using static Il2CppAssets.Scripts.Simulation.Simulation;
 
 namespace EnhancementMonkey;
 
+/// <summary>
+/// 
+/// </summary>
 public class EnhancementMonkey : BloonsTD6Mod
 {
+    /// <summary>
+    /// <inheritdoc/>
+    /// </summary>
+    public override void OnApplicationStart()
+    {
+    }
+
+    /// <summary>
+    /// Is MIB unlocked
+    /// </summary>
     public static bool MIB = false;
+    /// <summary>
+    /// Is Monkey Town Unlocked
+    /// </summary>
     public static bool MonkeyTown = false;
 
+    /// <summary>
+    /// The current unlocked enhancement level
+    /// </summary>
+    public static int CurrentEnhancementLevel = 1;
+
+    /// <summary>
+    /// All of the bought enhancements
+    /// </summary>
     public static List<ModEnhancement> BoughtEnhancements = [];
     /// <summary>
     /// Logs a certain thing if <see cref="DebugMode"/> and the minimum log level is at least this log level
@@ -56,20 +77,20 @@ public class EnhancementMonkey : BloonsTD6Mod
             }
         }
     }
-    public static bool menuOpen = false;
 
-    public static List<EnhancementLevel> UnlockedLevels = [EnhancementLevel.Paragon, EnhancementLevel.Basic];
-
-    public static readonly ModSettingCategory Debuging = new("Debuging")
+    internal static readonly ModSettingCategory Debuging = new("Debuging")
     { icon = VanillaSprites.AdvancedIntelUpgradeIcon };
 
-    public static readonly ModSettingBool DebugMode = new(false)
+    internal static readonly ModSettingBool DebugMode = new(false)
     {
         category = Debuging,
         icon = VanillaSprites.SettingsIcon,
         description = "Print extra information into the log (uneeded for the average user)"
     };
 
+    /// <summary>
+    /// Level of something to log
+    /// </summary>
     public enum LogLevel
     {
         /// <summary>
@@ -90,37 +111,49 @@ public class EnhancementMonkey : BloonsTD6Mod
         Dependency
     }
 
-    public static readonly ModSettingEnum<LogLevel> DebugLevel = new(LogLevel.Error)
+    internal static readonly ModSettingEnum<LogLevel> DebugLevel = new(LogLevel.Error)
     {
         category = Debuging,
         description = "Highest level displayed in debug mode"
     };
 
-    public static readonly ModSettingBool HideClutter = new(false)
+    internal static readonly ModSettingBool HideClutter = new(false)
     {
         category = Debuging,
         description = "Remove not so helpful logging from happening"
     };
 
+    /// <summary>
+    /// Are all of the enhancement levels pre-unlocked
+    /// </summary>
     public static readonly ModSettingBool LevelsUnlocked = new(false)
     {
         icon = VanillaSprites.UpgradeIcon,
         description = "Are all of the enhancement levels pre-unlocked?"
     };
 
+    /// <summary>
+    /// Does a popup show saying you bought the enhancement after buying the enhancement?
+    /// </summary>
     public static readonly ModSettingBool ShowBuyPopups = new(false)
     {
-        icon = VanillaSprites.WarningSign2,
+        icon = VanillaSprites.ShopBtn,
         description = "Does a popup show saying you bought the enhancement after buying the enhancement? (Super annoying so false by default)",
         requiresRestart = true
     };
 
-    /*public static readonly ModSettingBool ParagonsUnlocked = new(false)
+    /*/// <summary>
+    /// Are all paragon enhancements pre-unlocked
+    /// </summary>
+    public static readonly ModSettingBool ParagonsUnlocked = new(false)
     {
         icon = VanillaSprites.ParagonIcon,
         description = "Are all paragon enhancements pre-unlocked?"
     };*/
 
+    /// <summary>
+    /// How many enhancements get loaded per frame
+    /// </summary>
     public static readonly ModSettingInt EnhancementsLoadedPerFrame = new(200)
     {
         description = "How many enhancements to load per frame during loading, change this number if there's a lot of enhancements to load. Maxes at 1000/frame. \n\nOnly affects when the game first loads",
@@ -128,8 +161,11 @@ public class EnhancementMonkey : BloonsTD6Mod
         min = 200
     };
 
-    public static readonly ModSettingCategory GUI = new("GUI");
+    internal static readonly ModSettingCategory GUI = new("GUI");
 
+    /// <summary>
+    /// How many times taller the submenu panels are compared to how tall an enhancement details panel is
+    /// </summary>
     public static readonly ModSettingDouble PanelHeightMultiplier = new(2.5f)
     {
         description = "How many times taller the submenu panels are compared to how tall an enhancement details panel is. Small values may make the menu look cramped, and large values may break the game.",
@@ -137,6 +173,9 @@ public class EnhancementMonkey : BloonsTD6Mod
         category = GUI
     };
 
+    /// <summary>
+    /// How many times wider the submenu panels are compared to how wide an enhancement details panel is.
+    /// </summary>
     public static readonly ModSettingDouble PanelWidthMultiplier = new(1.4f)
     {
         description = "How many times wider the submenu panels are compared to how wide an enhancement details panel is. Small values may make the menu look cramped, and large values may block the screen.",
@@ -144,25 +183,54 @@ public class EnhancementMonkey : BloonsTD6Mod
         category = GUI
     };
 
+    /// <summary>
+    /// Horizontal location on screen
+    /// </summary>
     public static readonly ModSettingInt PanelX = new(2100)
     {
         description = "Horizontal location on screen",
         category = GUI
     };
 
+    /// <summary>
+    /// Vertical location on screen
+    /// </summary>
     public static readonly ModSettingInt PanelY = new(1600)
     {
         description = "Vertical location on screen",
         category = GUI
     };
 
+    /// <summary>
+    /// Gets all of the unlocked levels
+    /// </summary>
+    public static List<EnhancementLevel> UnlockedLevels { get => GetContent<EnhancementLevel>().FindAll(level => level.IsUnlocked()); }
 
     /// <summary>
     /// Clears everything.
     /// </summary>
     public static void Reset()
     {
-        UnlockedLevels = [EnhancementLevel.Basic];
+        if(LevelsUnlocked)
+        {
+            foreach(var level in GetContent<EnhancementLevel>())
+            {
+                if(level.Level > CurrentEnhancementLevel)
+                {
+                    CurrentEnhancementLevel = level.Level;
+                }
+            }
+        }
+        else
+        {
+            foreach (var level in GetContent<EnhancementLevel>())
+            {
+                if (level.Level < CurrentEnhancementLevel)
+                {
+                    CurrentEnhancementLevel = level.Level;
+                }
+            }
+        }
 
         foreach (var enhancement in GetContent<ModEnhancement>())
         {
@@ -182,7 +250,7 @@ public class EnhancementMonkey : BloonsTD6Mod
         }
         if (LevelsUnlocked)
         {
-            foreach (ModEnhancement enhancement in ModEnhancement.Enhancements)
+            foreach (ModEnhancement enhancement in GetContent<ModEnhancement>())
             {
                 if (enhancement.Modifies == ModifyType.Unlock)
                 {
@@ -199,17 +267,23 @@ public class EnhancementMonkey : BloonsTD6Mod
         MonkeyTown = false;
     }
 
+    /// <summary>
+    /// <inheritdoc/>
+    /// </summary>
     public override void OnGameModelLoaded(GameModel model)
     {
         Reset();
-        foreach ((string name, bool value) in ModSubmenu.Filters)
+        foreach ((string name, bool value) in ModSubmenu.LevelFilters)
         {
-            ModSubmenu.Filters[name] = true;
+            ModSubmenu.LevelFilters[name] = true;
         }
 
 
     }
 
+    /// <summary>
+    /// <inheritdoc/>
+    /// </summary>
     public override void OnCashAdded(double amount, Simulation.CashType from, int cashIndex, Simulation.CashSource source, Tower tower)
     {
         if (from == CashType.Normal)
@@ -221,6 +295,9 @@ public class EnhancementMonkey : BloonsTD6Mod
         }
     }
 
+    /// <summary>
+    /// <inheritdoc/>
+    /// </summary>
     public override void OnTowerSold(Il2CppAssets.Scripts.Simulation.Towers.Tower tower, float amount)
     {
         if (tower.towerModel.name.Contains("EnhancementMonkey"))
@@ -233,6 +310,9 @@ public class EnhancementMonkey : BloonsTD6Mod
         }
     }
 
+    /// <summary>
+    /// <inheritdoc/>
+    /// </summary>
     public override void OnTowerCreated(Il2CppAssets.Scripts.Simulation.Towers.Tower tower, Entity target, Model modelToUse)
     {
         if (tower.towerModel.baseId.Contains(TowerID<EnhancementMonkeyTower>()))
@@ -241,6 +321,9 @@ public class EnhancementMonkey : BloonsTD6Mod
         }
     }
 
+    /// <summary>
+    /// <inheritdoc/>
+    /// </summary>
     public override void OnTowerSelected(Il2CppAssets.Scripts.Simulation.Towers.Tower tower)
     {
         if (MainUi.instance != null)
@@ -251,6 +334,9 @@ public class EnhancementMonkey : BloonsTD6Mod
         if (tower.towerModel.baseId == TowerID<EnhancementMonkeyTower>()) { MainUi.CreateMainPanel(GetContent<ModSubmenu>(), tower); }
     }
 
+    /// <summary>
+    /// <inheritdoc/>
+    /// </summary>
     public override void OnTowerDeselected(Il2CppAssets.Scripts.Simulation.Towers.Tower tower)
     {
         if (MainUi.instance != null)

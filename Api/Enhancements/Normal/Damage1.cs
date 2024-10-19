@@ -1,5 +1,5 @@
 ﻿using BTD_Mod_Helper.Extensions;
-using Il2CppAssets.Scripts.Models.Towers;
+using EnhancementMonkey.Api.Ui.Submenues;using Il2CppAssets.Scripts.Models.Towers;
 using Il2CppAssets.Scripts.Models.Towers.Projectiles.Behaviors;
 using Il2CppAssets.Scripts.Models.Towers.Weapons;
 using System;
@@ -22,7 +22,7 @@ namespace EnhancementMonkey.Api.Enhancements.Normal
 
         public override float CostMultiplier => 1.5f;
 
-        public override EnhancementType EnhancementGroup => EnhancementType.Normal;
+        public override ModSubmenu Submenu => ModSubmenu.Normal;
 
         public override ModifyType Modifies => ModifyType.Weapon;
 

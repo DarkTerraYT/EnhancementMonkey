@@ -1,6 +1,6 @@
 ﻿
 using BTD_Mod_Helper.Extensions;
-using Il2CppAssets.Scripts.Models.Towers;
+using EnhancementMonkey.Api.Ui.Submenues;using Il2CppAssets.Scripts.Models.Towers;
 
 
 namespace EnhancementMonkey.Api.Enhancements.Misc
@@ -11,9 +11,9 @@ namespace EnhancementMonkey.Api.Enhancements.Misc
 
         public override int BaseCost => 315;
 
-        public override EnhancementLevel NewEnhancementLevel => EnhancementLevel.Basic;
+        public override EnhancementLevel EnhancementLevel => EnhancementLevel.Basic;
 
-        public override EnhancementType EnhancementGroup => EnhancementType.Misc;
+        public override ModSubmenu Submenu => ModSubmenu.Misc;
 
         public override ModifyType Modifies => ModifyType.Tower;
 

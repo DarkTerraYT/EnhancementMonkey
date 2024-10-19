@@ -1,6 +1,6 @@
 ﻿using BananaFarmParagon.bananafarmfake;
 using BTD_Mod_Helper.Extensions;
-using Il2CppAssets.Scripts.Models.Towers;
+using EnhancementMonkey.Api.Ui.Submenues;using Il2CppAssets.Scripts.Models.Towers;
 using Il2CppAssets.Scripts.Models.Towers.Behaviors;
 using Il2CppAssets.Scripts.Models.Towers.Behaviors.Attack;
 using Il2CppAssets.Scripts.Models.Towers.Behaviors.Attack.Behaviors;
@@ -21,7 +21,7 @@ namespace EnhancementMonkey.Api.Enhancements.Paragon
 
         public override string Icon => GetTextureGUID<BananaFarmParagon.Main>("BananaFarmParagon-Portrait");
 
-        public override string? ModID => "BananaFarmParagon";
+        public override string DependencyIds => "BananaFarmParagon";
 
         public override string Description => base.Description + ". Made by JonyBoyLovesPie";
 

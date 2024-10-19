@@ -1,9 +1,21 @@
 ﻿namespace EnhancementMonkey.Api.Ui.Submenues
 {
+    /// <summary>
+    /// Weapons submenu class
+    /// </summary>
     public class WeaponEnhancements : ModSubmenu
     {
-        public override EnhancementSubmenuInfo Info => new("Weapons", 1, EnhancementType.Weapon, this);
-
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         protected override int Order => 1;
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        public override void Register()
+        {
+            Weapon = this;
+        }
     }
 }

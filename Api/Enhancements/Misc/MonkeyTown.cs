@@ -1,4 +1,6 @@
-﻿namespace EnhancementMonkey.Api.Enhancements.Misc
+﻿using EnhancementMonkey.Api.Ui.Submenues;
+
+namespace EnhancementMonkey.Api.Enhancements.Misc
 {
     internal class MonkeyTown : ModEnhancement
     {
@@ -8,7 +10,7 @@
 
         public override int BaseCost => 10000;
 
-        public override EnhancementType EnhancementGroup => EnhancementType.Misc;
+        public override ModSubmenu Submenu => ModSubmenu.Misc;
 
         public override ModifyType Modifies => ModifyType.Other;
 

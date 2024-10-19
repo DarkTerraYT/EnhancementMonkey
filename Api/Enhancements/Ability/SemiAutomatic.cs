@@ -10,7 +10,7 @@ namespace EnhancementMonkey.Api.Enhancements.Ability
 
         public override int BaseCost => 4250;
 
-        public override EnhancementLevel NewEnhancementLevel => EnhancementLevel.Great;
+        public override EnhancementLevel EnhancementLevel => EnhancementLevel.Great;
 
         protected override string TowerID => "SniperMonkey-003";
     }

@@ -8,7 +8,7 @@
 
         public override int BaseCost => 715;
 
-        public override EnhancementLevel NewEnhancementLevel => EnhancementLevel.Good;
+        public override EnhancementLevel EnhancementLevel => EnhancementLevel.Good;
 
         protected override string TowerID => "MonkeySub-001";
     }

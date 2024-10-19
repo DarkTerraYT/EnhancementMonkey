@@ -27,22 +27,21 @@ namespace EnhancementMonkey.Api.Enhancements
         /// </summary>
         protected ModEnhancement() { }
 
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         protected sealed override int Order => Priority;
 
-        public static List<ModEnhancement> Enhancements = GetContent<ModEnhancement>();
-
-        public static Dictionary<EnhancementType, int> EnhancementsInType = new()
-        {
-            [EnhancementType.Normal] = 0,
-            [EnhancementType.Weapon] = 0,
-            [EnhancementType.Ability] = 0,
-            [EnhancementType.Misc] = 0,
-            [EnhancementType.Paragon] = 0
-        };
-
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         public sealed override int RegisterPerFrame => EnhancementsLoadedPerFrame;
 
         // Methods
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         public sealed override void Register()
         {
             // Set Defaults
@@ -50,53 +49,40 @@ namespace EnhancementMonkey.Api.Enhancements
             Locked = LockedByDefault;
 
             // Check for dependencies
-            if (!ModHelper.HasMod(ModID) & ModID != null)
+
+            foreach (string dependency in DependencyIds.Split(','))
             {
-                if (ModID != null)
+                if (!ModHelper.HasMod(dependency))
                 {
                     Locked = true;
                     HasDependencies = false;
-                    Debug("Enhancement with the ID " + Name + " Does not have the required mod with the ID " + ModID, LogLevel.Dependency);
-                    return;
+                    Debug("Enhancement with the ID " + Name + " Does not have the required mod with the ID " + DependencyIds, LogLevel.Dependency);
                 }
             }
+            
 
             // Set Enhancement Level
             if (AutoEnhancementLevel)
             {
                 if (Modifies != ModifyType.Unlock)
                 {
-                    if (BaseCost < GetInstance<GoodEnhancements>().BaseCost * 0.9f)
+                    EnhancementLevel newLevel = null!;
+
+                    List<EnhancementLevel> levels = GetContent<EnhancementLevel>();
+
+                    foreach (var level in levels)
                     {
-                        EnhancementLevel = EnhancementLevel.Basic;
-                    }
-                    else if (BaseCost < GetInstance<GreatEnhancements>().BaseCost * 0.9f)
-                    {
-                        EnhancementLevel = EnhancementLevel.Good;
-                    }
-                    else if (BaseCost < GetInstance<AwesomeEnhancements>().BaseCost * 0.9f)
-                    {
-                        EnhancementLevel = EnhancementLevel.Great;
-                    }
-                    else if (BaseCost < GetInstance<GodlyEnhancements>().BaseCost * 0.9f)
-                    {
-                        EnhancementLevel = EnhancementLevel.Awesome;
-                    }
-                    else if (BaseCost < GetInstance<PureEnhancements>().BaseCost * 0.9f)
-                    {
-                        EnhancementLevel = EnhancementLevel.Godly;
-                    }
-                    else if (BaseCost >= GetInstance<PureEnhancements>().BaseCost * 0.9f)
-                    {
-                        EnhancementLevel = EnhancementLevel.Pure;
+                        if (BaseCost <= level.Cost * 0.9f)
+                        {
+                            newLevel = level;
+                            break;
+                        }
                     }
 
-                    Debug($"Set enhancement {Name}'s Enhancement Level to {EnhancementLevel}", LogLevel.Info, true);
+                    newLevel ??= EnhancementLevel.Basic;
+
+                    Debug($"Set enhancement {Name}'s Enhancement Level to {EnhancementLevel.Id}", LogLevel.Info, true);
                 }
-            }
-            else
-            {
-                EnhancementLevel = NewEnhancementLevel;
             }
         }
 
@@ -105,15 +91,15 @@ namespace EnhancementMonkey.Api.Enhancements
         /// 
         /// Also does stuff related to locking.
         /// 
-        /// To apply this enhancement to a particular weapon use <see cref="ModifyWeapon(WeaponModel)"/> 
+        /// To apply this enhancement without these extra functions, use the other various methods in this class.
         /// </summary>
         /// <param name="tower">The EnhancementMonkeyTower that the enhancement's being applied to.</param>
         public void ApplyEnhancement(Il2CppAssets.Scripts.Simulation.Towers.Tower tower)
         {
             // Check for dependiencies
-            if (ModID != null & !ModHelper.HasMod(ModID))
+            if (DependencyIds != null & !ModHelper.HasMod(DependencyIds))
             {
-                Debug("Enhancement with the ID " + Name + " Does not have the required mod with the ID " + ModID, LogLevel.Dependency);
+                Debug("Enhancement with the ID " + Name + " Does not have the required mod with the ID " + DependencyIds, LogLevel.Dependency);
                 return;
             }
             else
@@ -142,11 +128,11 @@ namespace EnhancementMonkey.Api.Enhancements
                 AbilityMenu.instance.AbilitiesChanged(); // Update Ability Menu
 
                 // Get current open submenu
-                ModSubmenu? submenu = null;
+                ModSubmenu submenu = null;
 
                 foreach (var submenu_ in GetContent<ModSubmenu>())
                 {
-                    if (submenu_.Info.Group == EnhancementGroup)
+                    if (submenu_.Id == Submenu.Id)
                     {
                         submenu = submenu_;
                     }
@@ -163,7 +149,7 @@ namespace EnhancementMonkey.Api.Enhancements
 
                     OnLock();
 
-                    MainUi.instance?.OpenSubmenu(tower, InGame.instance.uiRect, submenu, EnhancementGroup);
+                    MainUi.instance?.OpenSubmenu(tower, InGame.instance.uiRect, Submenu.Id);
                 }
                 if (TimesBought >= Max & Max > 0)
                 {
@@ -175,7 +161,7 @@ namespace EnhancementMonkey.Api.Enhancements
 
                     OnLock();
 
-                    MainUi.instance?.OpenSubmenu(tower, InGame.instance.uiRect, submenu, EnhancementGroup);
+                    MainUi.instance?.OpenSubmenu(tower, InGame.instance.uiRect, Submenu.Id);
                 }
                 // Check to see if any paragon enhancements have been unlocked
                 foreach (var enhancement in GetContent<ParagonEnhancement>())
@@ -331,7 +317,7 @@ namespace EnhancementMonkey.Api.Enhancements
         /// <summary>
         /// Use when your enhancement changes something in a tower that might change when a new enhancement is bought
         /// </summary>
-        /// <param name="tower">Tower to apply to</param>
+        /// <param name="towerModel">Tower to apply to</param>
         public virtual void ModifyTowerOnNewEnhancement(TowerModel towerModel) 
         {
         }
@@ -405,23 +391,24 @@ namespace EnhancementMonkey.Api.Enhancements
         /// </summary>
         public uint TimesBought = 0;
         /// <summary>
-        /// Can be bought, if this is set to true then the enhancement will be hidden on next open
+        /// Unable to be bought, if this is set to true then the enhancement will be hidden on next open
         /// </summary>
         public bool Locked = false;
         /// <summary>
-        /// Don't change this, because it might mess up the submenus.
+        /// Has this enhancement been loaded into the submenu?
         /// </summary>
-        public bool Added = false;
+        public bool Added { get; internal set; } = false;
 
         //Pricing
         /// <summary>
-        /// Base Cost, will not be affected by game mode.
+        /// How much this enhancement costs, will not be affected by game mode.
         /// </summary>
         public abstract int BaseCost { get; }
+
         /// <summary>
-        /// How much it currently costs. 0 before the enhancement has been registerred.
+        /// Base cost of the enhancement
         /// </summary>
-        public int Cost = 0;
+        public int Cost { get; set; } = 0;
         /// <summary>
         /// How much more it costs every upgrade based on the base cost. By default 1.2f. 
         /// </summary>
@@ -436,19 +423,14 @@ namespace EnhancementMonkey.Api.Enhancements
         /// </summary>
         public virtual int Priority => 1;
         /// <summary>
-        /// The larger priority, changes the enhancement's color. Also makes it locked behind certain upgrades if the setting is turned on. Only used if Automatic Enhancement Level is set to false.
+        /// The larger priority, changes the enhancement's color. Also makes it locked behind certain upgrades if the setting is turned on. Set automatically if AutoEnhancementLevel is set to true (true by default)
         /// </summary>
-        public virtual EnhancementLevel NewEnhancementLevel => EnhancementLevel.Basic;
-
-        /// <summary>
-        /// Enhancement Level of the enhancement, basic before loading.
-        /// </summary>
-        public EnhancementLevel EnhancementLevel = EnhancementLevel.Basic;
+        public virtual EnhancementLevel EnhancementLevel { get; internal set; } = EnhancementLevel.Basic;
 
         /// <summary>
         /// Which submenu to put it in (normal is stat)
         /// </summary>
-        public abstract EnhancementType EnhancementGroup { get; }
+        public abstract ModSubmenu Submenu { get; }
 
         // Misc
         /// <summary>
@@ -462,9 +444,9 @@ namespace EnhancementMonkey.Api.Enhancements
         public virtual bool LockedByDefault => false;
 
         /// <summary>
-        /// If this ModEnhancement requires another mod. Set to null if it doesn't require another mod.
+        /// If this ModEnhancement requires another mod. Set as an empty string if it doesn't require another mod. Seperate mods with a comma. Example: public override string? DependencyIds "CardMonkey,Unlimited5thTiers"
         /// </summary>
-        public virtual string? ModID => null;
+        public virtual string DependencyIds => "";
 
 
         /// <summary>
@@ -472,25 +454,18 @@ namespace EnhancementMonkey.Api.Enhancements
         /// </summary>
         public virtual bool AutoEnhancementLevel => true;
 
-        public bool HasDependencies = true;
         /// <summary>
-        /// Use this for getting the actual base cost after the game mode has been chosen
+        /// Whether or not 
         /// </summary>
-        public int TrueBaseCost = 0;
+        public bool HasDependencies = true;
 
+        /// <summary>
+        /// Unused
+        /// </summary>
         public bool hitCamo = false;
+        /// <summary>
+        /// Unused
+        /// </summary>
         public bool hitLead = false;
-
-        public static Dictionary<EnhancementLevel, string> EnhancementLevelNames = new()
-        {
-            [EnhancementLevel.Basic] = "Basic",
-            [EnhancementLevel.Good] = "Good",
-            [EnhancementLevel.Great] = "Great",
-            [EnhancementLevel.Awesome] = "Awesome",
-            [EnhancementLevel.Godly] = "Godly",
-            [EnhancementLevel.Pure] = "Pure",
-            [EnhancementLevel.Paragon] = "Paragon",
-            [EnhancementLevel.Hidden] = "Hidden",
-        }; 
     }
 }

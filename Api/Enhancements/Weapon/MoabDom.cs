@@ -6,7 +6,7 @@
 
         public override int BaseCost => 54100;
 
-        public override EnhancementLevel NewEnhancementLevel => EnhancementLevel.Godly;
+        public override EnhancementLevel EnhancementLevel => EnhancementLevel.Godly;
 
         protected override string TowerID => "BoomerangMonkey-025";
     }

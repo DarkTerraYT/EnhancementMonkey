@@ -10,3 +10,4 @@ global using Il2CppAssets.Scripts.Unity;
 global using static BTD_Mod_Helper.Api.ModContent;
 global using static BTD_Mod_Helper.ModHelper;
 global using static EnhancementMonkey.EnhancementMonkey;
+global using EnhancementMonkey.Api.Enhancements.Levels;

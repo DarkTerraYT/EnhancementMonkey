@@ -6,7 +6,7 @@
 
         public override int BaseCost => 555;
 
-        public override EnhancementLevel NewEnhancementLevel => EnhancementLevel.Basic;
+        public override EnhancementLevel EnhancementLevel => EnhancementLevel.Basic;
 
         protected override string TowerID => "DartMonkey-320";
 

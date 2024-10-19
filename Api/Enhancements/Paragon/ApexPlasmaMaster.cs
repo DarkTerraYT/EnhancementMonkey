@@ -1,7 +1,7 @@
 ﻿using BTD_Mod_Helper.Extensions;
 using EnhancementMonkey.Api.Enhancements.Ability;
 using EnhancementMonkey.Api.Enhancements.Weapon;
-using Il2CppAssets.Scripts.Models.Towers;
+using EnhancementMonkey.Api.Ui.Submenues;using Il2CppAssets.Scripts.Models.Towers;
 using Il2CppAssets.Scripts.Models.Towers.Behaviors.Attack;
 using System;
 using System.Collections.Generic;

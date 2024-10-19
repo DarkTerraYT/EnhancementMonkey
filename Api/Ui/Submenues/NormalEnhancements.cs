@@ -1,9 +1,21 @@
 ﻿namespace EnhancementMonkey.Api.Ui.Submenues
 {
+    /// <summary>
+    /// Stats submenu class
+    /// </summary>
     public class NormalEnhancements : ModSubmenu
     {
-        public override EnhancementSubmenuInfo Info => new("Stats", 0, EnhancementType.Normal, this);
-
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         protected override int Order => 0;
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        public override void Register()
+        {
+            Normal = this;
+        }
     }
 }

@@ -6,10 +6,22 @@ using System.Threading.Tasks;
 
 namespace EnhancementMonkey.Api.Ui.Submenues
 {
-    internal class ParagonEnhancements : ModSubmenu
+    /// <summary>
+    /// Paragon submenu class
+    /// </summary>
+    public class ParagonEnhancements : ModSubmenu
     {
-        public override EnhancementSubmenuInfo Info => new("Paragons", 4, EnhancementType.Hide, this);
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        public override void Register()
+        {
+            Paragon = this;
+        }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         public override string EmptyText => "No Paragons found! Try getting some t5s with a paragon";
     }
 }

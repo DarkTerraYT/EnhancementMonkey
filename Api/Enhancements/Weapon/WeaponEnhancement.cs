@@ -1,5 +1,5 @@
 ﻿using BTD_Mod_Helper.Extensions;
-using Il2CppAssets.Scripts.Models.Towers;
+using EnhancementMonkey.Api.Ui.Submenues;using Il2CppAssets.Scripts.Models.Towers;
 using Il2CppAssets.Scripts.Models.Towers.Behaviors.Attack;
 using Il2CppAssets.Scripts.Models.Towers.Filters;
 using Il2CppAssets.Scripts.Models.Towers.Projectiles.Behaviors;
@@ -15,8 +15,14 @@ namespace EnhancementMonkey.Api.Enhancements.Weapon
     /// </summary>
     public abstract class WeaponEnhancement : ModEnhancement
     {
-        public override EnhancementType EnhancementGroup => EnhancementType.Weapon;
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        public override ModSubmenu Submenu => ModSubmenu.Weapon;
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         public override ModifyType Modifies => ModifyType.Tower;
         /// <summary>
         /// <inheritdoc/>
@@ -24,6 +30,9 @@ namespace EnhancementMonkey.Api.Enhancements.Weapon
         /// </summary>
         public override float CostMultiplier => 1.1f;
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         public override string Description => WeaponDescriptionBuilder();
 
         string WeaponDescriptionBuilder()
@@ -61,6 +70,9 @@ namespace EnhancementMonkey.Api.Enhancements.Weapon
         /// </summary>
         protected virtual bool AddAll => false;
 
+        /// <summary>
+        /// Change the range of the attack model to the tower's
+        /// </summary>
         protected virtual bool ChangeRange => true;
 
         private AttackModel AttackModel => Game.instance.model.GetTowerFromId(TowerID).GetAttackModel(Index).Duplicate();
@@ -81,6 +93,10 @@ namespace EnhancementMonkey.Api.Enhancements.Weapon
 
         }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="towerModel"></param>
         protected override void ModifyTower(TowerModel towerModel)
         {
             if (!AddAll)

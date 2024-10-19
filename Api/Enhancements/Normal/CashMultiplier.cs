@@ -1,6 +1,6 @@
 ﻿using BTD_Mod_Helper.Extensions;
 using Il2CppAssets.Scripts.Models.SimulationBehaviors;
-using Il2CppAssets.Scripts.Models.Towers;
+using EnhancementMonkey.Api.Ui.Submenues;using Il2CppAssets.Scripts.Models.Towers;
 using Il2CppAssets.Scripts.Models.Towers.Behaviors;
 using Il2CppAssets.Scripts.Models.Towers.Behaviors.Abilities.Behaviors;
 using Il2CppAssets.Scripts.Models.Towers.Projectiles.Behaviors;
@@ -24,7 +24,7 @@ namespace EnhancementMonkey.Api.Enhancements.Normal
 
         public override uint Max => 10;
 
-        public override EnhancementType EnhancementGroup => EnhancementType.Misc;
+        public override ModSubmenu Submenu => ModSubmenu.Misc;
 
         public override ModifyType Modifies => ModifyType.Weapon;
 

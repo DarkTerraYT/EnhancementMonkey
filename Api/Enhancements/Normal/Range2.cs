@@ -1,6 +1,6 @@
 ﻿
 using BTD_Mod_Helper.Extensions;
-using Il2CppAssets.Scripts.Models.Towers;
+using EnhancementMonkey.Api.Ui.Submenues;using Il2CppAssets.Scripts.Models.Towers;
 
 namespace EnhancementMonkey.Api.Enhancements.Normal
 {
@@ -12,7 +12,7 @@ namespace EnhancementMonkey.Api.Enhancements.Normal
 
         public override int BaseCost => 1000;
 
-        public override LockedByDefault => true;
+        public override bool LockedByDefault => true;
 
         public override float CostMultiplier => 1.75f;
 
@@ -22,9 +22,9 @@ namespace EnhancementMonkey.Api.Enhancements.Normal
 
         public override string EnhancementName => "Range 2";
 
-        public override EnhancementLevel NewEnhancementLevel => EnhancementLevel.Basic;
+        public override EnhancementLevel EnhancementLevel => EnhancementLevel.Basic;
 
-        public override EnhancementType EnhancementGroup => EnhancementType.Normal;
+        public override ModSubmenu Submenu => ModSubmenu.Normal;
 
         public override ModifyType Modifies => ModifyType.Tower;
 

@@ -1,21 +1,21 @@
 ﻿using BTD_Mod_Helper.Extensions;
 using CardMonkey;
-using Il2CppAssets.Scripts.Models.Towers;
+using EnhancementMonkey.Api.Ui.Submenues;using Il2CppAssets.Scripts.Models.Towers;
 using Il2CppAssets.Scripts.Models.Towers.Behaviors.Attack;
 
 namespace EnhancementMonkey.Api.Enhancements.Weapon
 {
     internal class Card : ModEnhancement
     {
-        public override string Icon => GetSpriteReference<CardMonkeyMod>("CutTheDeck-Icon").GUID;
+        public override string Icon => GetSpriteReference<CardMonkeyMod>("CutTheDeck-Icon").AssetGUID;
 
-        public override string? ModID => "CardMonkey";
+        public override string DependencyIds => "CardMonkey";
 
         public override int BaseCost => 210;
 
-        public override EnhancementLevel NewEnhancementLevel => EnhancementLevel.Basic;
+        public override EnhancementLevel EnhancementLevel => EnhancementLevel.Basic;
 
-        public override EnhancementType EnhancementGroup => EnhancementType.Weapon;
+        public override ModSubmenu Submenu => ModSubmenu.Weapon;
 
         public override ModifyType Modifies => ModifyType.Tower;
 

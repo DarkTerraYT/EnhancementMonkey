@@ -1,5 +1,5 @@
 ﻿using BTD_Mod_Helper.Extensions;
-using Il2CppAssets.Scripts.Models.Towers;
+using EnhancementMonkey.Api.Ui.Submenues;using Il2CppAssets.Scripts.Models.Towers;
 using Il2CppAssets.Scripts.Models.Towers.Behaviors.Attack;
 using Il2CppAssets.Scripts.Models.Towers.Filters;
 using Il2CppAssets.Scripts.Models.Towers.Projectiles.Behaviors;
@@ -17,7 +17,7 @@ namespace EnhancementMonkey.Api.Enhancements.Weapon
 
         public override int BaseCost => 51400;
 
-        public override EnhancementType EnhancementGroup => EnhancementType.Weapon;
+        public override ModSubmenu Submenu => ModSubmenu.Weapon;
 
         public override ModifyType Modifies => ModifyType.Tower;
 

@@ -1,6 +1,6 @@
 ﻿
 using BTD_Mod_Helper.Extensions;
-using Il2CppAssets.Scripts.Models.Towers;
+using EnhancementMonkey.Api.Ui.Submenues;using Il2CppAssets.Scripts.Models.Towers;
 using Il2CppAssets.Scripts.Models.Towers.Projectiles;
 using System.Linq;
 
@@ -18,7 +18,7 @@ namespace EnhancementMonkey.Api.Enhancements.Normal
 
         public override uint Max => 8;
 
-        public override EnhancementLevel NewEnhancementLevel => EnhancementLevel.Basic;
+        public override EnhancementLevel EnhancementLevel => EnhancementLevel.Basic;
 
         public override string EnhancementName => "Pierce 2";
 
@@ -46,6 +46,6 @@ namespace EnhancementMonkey.Api.Enhancements.Normal
             projectileModel.pierce += 2;
         }
 
-        public override EnhancementType EnhancementGroup => EnhancementType.Normal;
+        public override ModSubmenu Submenu => ModSubmenu.Normal;
     }
 }

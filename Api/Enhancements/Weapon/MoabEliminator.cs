@@ -6,7 +6,7 @@
 
         public override int BaseCost => 31500;
 
-        public override EnhancementLevel NewEnhancementLevel => EnhancementLevel.Awesome;
+        public override EnhancementLevel EnhancementLevel => EnhancementLevel.Awesome;
 
         protected override string TowerID => "BombShooter-250";
     }

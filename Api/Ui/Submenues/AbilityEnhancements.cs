@@ -2,7 +2,10 @@
 {
     internal class AbilityEnhancements : ModSubmenu
     {
-        public override EnhancementSubmenuInfo Info => new("Abilities", 2, Enum.EnhancementType.Ability, this);
+        public override void Register()
+        {
+            Ability = this;
+        }
 
         protected override int Order => 2;
 

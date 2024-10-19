@@ -1,7 +1,7 @@
 ﻿using BTD_Mod_Helper.Extensions;
 using Il2CppAssets.Scripts.Models.Towers.Filters;
 using Il2CppAssets.Scripts.Models.Towers.Projectiles.Behaviors;
-using Il2CppAssets.Scripts.Models.Towers;
+using EnhancementMonkey.Api.Ui.Submenues;using Il2CppAssets.Scripts.Models.Towers;
 
 namespace EnhancementMonkey.Api.Enhancements.Weapon
 {
@@ -11,11 +11,11 @@ namespace EnhancementMonkey.Api.Enhancements.Weapon
 
         public override int BaseCost => 400;
 
-        public override EnhancementLevel NewEnhancementLevel => EnhancementLevel.Basic;
+        public override EnhancementLevel EnhancementLevel => EnhancementLevel.Basic;
 
         protected override string TowerID => "MortarMonkey";
 
-        public override EnhancementType EnhancementGroup => EnhancementType.Weapon;
+        public override ModSubmenu Submenu => ModSubmenu.Weapon;
 
         public override ModifyType Modifies => ModifyType.Tower;
 

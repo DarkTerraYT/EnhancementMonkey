@@ -1,14 +1,15 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
         <RootNamespace>EnhancementMonkey</RootNamespace>
         <Configurations>Debug;Release</Configurations>
-        <Nullable>enable</Nullable>
         <AssemblyName>EnhancementMonkey</AssemblyName>
         <LangVersion>latest</LangVersion>
         <Optimize>False</Optimize>
         <DebugType>embedded</DebugType>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+
+		<DocumentationFile>bin\Debug\EnhancementMonkey.xml</DocumentationFile>
     </PropertyGroup>
     <ItemGroup>
       <None Remove="Assets\Textures\Icon - Copy.png" />

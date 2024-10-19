@@ -1,6 +1,6 @@
 ﻿
 using BTD_Mod_Helper.Extensions;
-using Il2CppAssets.Scripts.Models.Towers;
+using EnhancementMonkey.Api.Ui.Submenues;using Il2CppAssets.Scripts.Models.Towers;
 using Il2CppAssets.Scripts.Models.Towers.Filters;
 using Il2CppAssets.Scripts.Models.Towers.Projectiles;
 using Il2CppAssets.Scripts.Models.Towers.Weapons;
@@ -16,15 +16,15 @@ namespace EnhancementMonkey.Api.Enhancements.Misc
 
         public override int BaseCost => 815;
 
-        public override EnhancementLevel NewEnhancementLevel => EnhancementLevel.Good;
+        public override EnhancementLevel EnhancementLevel => EnhancementLevel.Good;
 
-        public override EnhancementType EnhancementGroup => EnhancementType.Misc;
+        public override ModSubmenu Submenu => ModSubmenu.Misc;
 
         public override bool LockAfterBuy => true;
 
         public override ModifyType Modifies => ModifyType.Weapon;
 
-        public override void ModifyTower(Il2CppAssets.Scripts.Simulation.Towers.Tower tower)
+        public override void ModifyTower(Tower tower)
         {
             hitCamo = true;
 

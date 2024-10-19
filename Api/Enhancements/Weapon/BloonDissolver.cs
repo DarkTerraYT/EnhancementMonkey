@@ -6,7 +6,7 @@
 
         public override int BaseCost => 3100;
 
-        public override EnhancementLevel NewEnhancementLevel => EnhancementLevel.Great;
+        public override EnhancementLevel EnhancementLevel => EnhancementLevel.Great;
 
         protected override string TowerID => "GlueGunner-300";
     }
