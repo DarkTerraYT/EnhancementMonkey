@@ -1,4 +1,4 @@
-﻿using BTD_Mod_Helper.Api;
+using BTD_Mod_Helper.Api;
 using BTD_Mod_Helper.Extensions;
 using EnhancementMonkey.Api.Enhancements.Paragon;
 using EnhancementMonkey.Api.Enhancements.Unlocks;
@@ -136,7 +136,7 @@ namespace EnhancementMonkey.Api.Enhancements
                     }
                 }
 
-                Cost *= (int)(Cost * CostMultiplier);
+                Cost += (int)(BaseCost * CostMultiplier); // Fix Price Multi - Mattcy1
 
                 ModifyOther();
                 AbilityMenu.instance.AbilitiesChanged(); // Update Ability Menu
