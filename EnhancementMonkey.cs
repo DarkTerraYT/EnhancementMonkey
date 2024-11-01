@@ -1,9 +1,12 @@
+using BTD_Mod_Helper.Api;
 using BTD_Mod_Helper.Api.ModOptions;
 using BTD_Mod_Helper.Extensions;
 using EnhancementMonkey;
 using EnhancementMonkey.Api.Enhancements.Paragon;
 using EnhancementMonkey.Api.Ui.Submenues;
+using HarmonyLib;
 using Il2CppAssets.Scripts.Models;
+using Il2CppAssets.Scripts.Models.Profile;
 using Il2CppAssets.Scripts.Simulation;
 using Il2CppAssets.Scripts.Simulation.Objects;
 using Il2CppAssets.Scripts.Simulation.Towers;
@@ -13,6 +16,7 @@ using MelonLoader;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using static Il2CppAssets.Scripts.Simulation.Simulation;
 
@@ -28,6 +32,7 @@ public class EnhancementMonkey : BloonsTD6Mod
     public static bool MonkeyTown = false;
 
     public static List<ModEnhancement> BoughtEnhancements = [];
+
     /// <summary>
     /// Logs a certain thing if <see cref="DebugMode"/> and the minimum log level is at least this log level
     /// </summary>
@@ -182,6 +187,7 @@ public class EnhancementMonkey : BloonsTD6Mod
 
             enhancement.Added = false;
         }
+
         if (LevelsUnlocked)
         {
             foreach (ModEnhancement enhancement in ModEnhancement.Enhancements)
@@ -201,6 +207,8 @@ public class EnhancementMonkey : BloonsTD6Mod
         MonkeyTown = false;
     }
 
+
+
     public override void OnGameModelLoaded(GameModel model)
     {
         Reset();
@@ -208,8 +216,6 @@ public class EnhancementMonkey : BloonsTD6Mod
         {
             ModSubmenu.Filters[name] = true;
         }
-
-
     }
 
     public override void OnCashAdded(double amount, Simulation.CashType from, int cashIndex, Simulation.CashSource source, Tower tower)

@@ -375,8 +375,6 @@ namespace EnhancementMonkey.Api.Ui
                                     InGame.instance.AddCash(-enhancement.Cost);
                                     enhancementMonkey.worth += enhancement.Cost;
                                     
-                                    
-                                    enhancement.Cost += (int)(enhancement.TrueBaseCost * enhancement.CostMultiplier); // Fixed Price Multi - Mattcy1
                                     enhancement.TimesBought++;
 
                                     if (!BoughtEnhancements.Contains(enhancement))
@@ -391,8 +389,6 @@ namespace EnhancementMonkey.Api.Ui
                                     if (DebugMode)
                                     {
                                         Debug("Bought Enhancement!", LogLevel.Info);
-                                        Debug(enhancement.TrueBaseCost, LogLevel.Info);
-                                        Debug(enhancement.CostMultiplier, LogLevel.Info);
                                     }
                                     if (PopupScreen.instance != null)
                                     {

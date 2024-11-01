@@ -1,1 +1,1 @@
-Bug fixes, fix for v45, greatly improve submenu loading.
+Fix pricing bug

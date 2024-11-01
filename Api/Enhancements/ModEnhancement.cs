@@ -1,4 +1,5 @@
 using BTD_Mod_Helper.Api;
+using BTD_Mod_Helper.Api.Helpers;
 using BTD_Mod_Helper.Extensions;
 using EnhancementMonkey.Api.Enhancements.Paragon;
 using EnhancementMonkey.Api.Enhancements.Unlocks;
@@ -13,7 +14,9 @@ using Il2CppAssets.Scripts.Simulation.Towers;
 using Il2CppAssets.Scripts.Unity.UI_New.InGame;
 using Il2CppAssets.Scripts.Unity.UI_New.InGame.AbilitiesMenu;
 using Il2CppAssets.Scripts.Unity.UI_New.Popups;
+using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace EnhancementMonkey.Api.Enhancements
 {
@@ -39,6 +42,20 @@ namespace EnhancementMonkey.Api.Enhancements
             [EnhancementType.Misc] = 0,
             [EnhancementType.Paragon] = 0
         };
+
+        /// <summary>
+        /// Updates <see cref="TrueBaseCost"/> based on <see cref="InGame.instance"/>, if it's not null.
+        /// </summary>
+        public static void UpdateTrueBaseCostsByGameMode()
+        {
+            if (InGame.instance.GetGameModel() != null)
+            {
+                foreach(var enhancement in GetContent<ModEnhancement>())
+                {
+                    enhancement.TrueBaseCost = CostHelper.CostForDifficulty(enhancement.BaseCost, InGame.instance);
+                }
+            }
+        }
 
         public sealed override int RegisterPerFrame => EnhancementsLoadedPerFrame;
 
@@ -136,7 +153,7 @@ namespace EnhancementMonkey.Api.Enhancements
                     }
                 }
 
-                Cost += (int)(BaseCost * CostMultiplier); // Fix Price Multi - Mattcy1
+                Cost += (int) (BaseCost * (CostMultiplier - 1));
 
                 ModifyOther();
                 AbilityMenu.instance.AbilitiesChanged(); // Update Ability Menu
@@ -403,7 +420,7 @@ namespace EnhancementMonkey.Api.Enhancements
         /// <summary>
         /// Used in the mod for locking
         /// </summary>
-        public uint TimesBought = 0;
+        public int TimesBought = 0;
         /// <summary>
         /// Can be bought, if this is set to true then the enhancement will be hidden on next open
         /// </summary>
