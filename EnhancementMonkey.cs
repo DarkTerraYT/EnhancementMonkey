@@ -38,12 +38,12 @@ public class EnhancementMonkey : BloonsTD6Mod
     /// </summary>
     /// <param name="message">What to log</param>
     /// <param name="level">Log level</param>
-    /// <param name="clutter">does this get logged a lot/not very helpful</param>
-    public static void Debug(object message, LogLevel level, bool clutter = false)
+    /// <param name="verbose">does this get logged a lot/not very helpful</param>
+    public static void Debug(object message, LogLevel level, bool verbose = false)
     {
         if (DebugMode && level <= DebugLevel)
         {
-            if (clutter & HideClutter)
+            if (verbose & HideVerbose)
             {
                 return;
             }
@@ -103,7 +103,7 @@ public class EnhancementMonkey : BloonsTD6Mod
         description = "Highest level displayed in debug mode"
     };
 
-    public static readonly ModSettingBool HideClutter = new(false)
+    public static readonly ModSettingBool HideVerbose = new(false)
     {
         category = Debuging,
         description = "Remove not so helpful logging from happening"

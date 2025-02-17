@@ -14,6 +14,7 @@ using Il2CppAssets.Scripts.Simulation.Towers;
 using Il2CppAssets.Scripts.Unity.UI_New.InGame;
 using Il2CppAssets.Scripts.Unity.UI_New.InGame.AbilitiesMenu;
 using Il2CppAssets.Scripts.Unity.UI_New.Popups;
+using MelonLoader;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
@@ -117,6 +118,56 @@ namespace EnhancementMonkey.Api.Enhancements
             }
         }
 
+        System.Collections.IEnumerator Apply(Tower tower)
+        {
+            foreach (var enhancement in GetContent<ModEnhancement>())
+            {
+                if (enhancement.Modifies >= ModifyType.Tower)
+                {
+                    var towerModel = tower.rootModel.Duplicate().Cast<TowerModel>();
+
+                    ModifyTowerOnNewEnhancement(towerModel);
+
+                    tower.UpdateRootModel(towerModel);
+
+                    yield return null;
+                }
+            }
+
+            yield return null;
+        }
+
+        System.Collections.IEnumerator CheckParagons()
+        {
+            foreach (var enhancement in GetContent<ParagonEnhancement>())
+            {
+                List<ModEnhancement> missingEnhancements = [];
+
+                foreach (var reqEnhancement in enhancement.RequiredEnhancements)
+                {
+                    if (!BoughtEnhancements.Contains(reqEnhancement))
+                    {
+                        missingEnhancements.Add(reqEnhancement);
+                        Debug("Paragon enhancement " + enhancement.Name + " is missing enhancement " + reqEnhancement.Name, LogLevel.Info);
+                    }
+                }
+
+                enhancement.HasRequirements = missingEnhancements.Count == 0;
+
+                if (enhancement.HasRequirements & enhancement.HasDependencies & UnlockedLevels.Contains(enhancement.EnhancementLevel))
+                {
+                    if (PopupScreen.instance != null && enhancement.HasDependencies)
+                    {
+                        PopupScreen.instance.ShowOkPopup(enhancement.UnlockText);
+                    }
+                }
+
+                yield return null;
+            }
+
+            yield return null;
+        }
+
         /// <summary>
         /// Modifies the tower model on buy and changes the actual cost. 
         /// 
@@ -141,17 +192,7 @@ namespace EnhancementMonkey.Api.Enhancements
                     ModifyTower(tower);
                 }
 
-                foreach(var enhancement in GetContent<ModEnhancement>()) 
-                {
-                    if(enhancement.Modifies >= ModifyType.Tower) 
-                    {
-                        var towerModel = tower.rootModel.Duplicate().Cast<TowerModel>();
-
-                        ModifyTowerOnNewEnhancement(towerModel);
-
-                        tower.UpdateRootModel(towerModel);
-                    }
-                }
+                MelonCoroutines.Start(Apply(tower));
 
                 Cost += (int) (BaseCost * (CostMultiplier - 1));
 
@@ -195,29 +236,7 @@ namespace EnhancementMonkey.Api.Enhancements
                     MainUi.instance?.OpenSubmenu(InGame.instance.uiRect, submenu, EnhancementGroup);
                 }
                 // Check to see if any paragon enhancements have been unlocked
-                foreach (var enhancement in GetContent<ParagonEnhancement>())
-                {
-                    List<ModEnhancement> missingEnhancements = [];
-
-                    foreach (var reqEnhancement in enhancement.RequiredEnhancements)
-                    {
-                        if (!BoughtEnhancements.Contains(reqEnhancement))
-                        {
-                            missingEnhancements.Add(reqEnhancement);
-                            Debug("Paragon enhancement " + enhancement.Name + " is missing enhancement " + reqEnhancement.Name, LogLevel.Info);
-                        }
-                    }
-
-                    enhancement.HasRequirements = missingEnhancements.Count == 0;
-
-                    if (enhancement.HasRequirements & enhancement.HasDependencies & UnlockedLevels.Contains(enhancement.EnhancementLevel))
-                    {
-                        if (PopupScreen.instance != null && enhancement.HasDependencies)
-                        {
-                            PopupScreen.instance.ShowOkPopup(enhancement.UnlockText);
-                        }
-                    }
-                }
+                MelonCoroutines.Start(CheckParagons());
             }
         }
         /// <summary>
