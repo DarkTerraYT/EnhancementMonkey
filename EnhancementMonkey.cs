@@ -6,18 +6,12 @@ using EnhancementMonkey.Api.Enhancements.Paragon;
 using EnhancementMonkey.Api.Ui.Submenues;
 using HarmonyLib;
 using Il2CppAssets.Scripts.Models;
-using Il2CppAssets.Scripts.Models.Profile;
 using Il2CppAssets.Scripts.Simulation;
 using Il2CppAssets.Scripts.Simulation.Objects;
 using Il2CppAssets.Scripts.Simulation.Towers;
 using Il2CppAssets.Scripts.Unity.UI_New.InGame;
-using Il2CppAssets.Scripts.Unity.UI_New.Popups;
 using MelonLoader;
-using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
 using static Il2CppAssets.Scripts.Simulation.Simulation;
 
 [assembly: MelonInfo(typeof(EnhancementMonkey.EnhancementMonkey), ModHelperData.Name, ModHelperData.Version, ModHelperData.RepoOwner)]

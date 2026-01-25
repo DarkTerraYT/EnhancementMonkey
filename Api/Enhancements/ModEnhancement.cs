@@ -197,7 +197,7 @@ namespace EnhancementMonkey.Api.Enhancements
                 Cost += (int) (BaseCost * (CostMultiplier - 1));
 
                 ModifyOther();
-                AbilityMenu.instance.AbilitiesChanged(); // Update Ability Menu
+                UnityEngine.Object.FindFirstObjectByType<AbilityMenu>().AbilitiesChanged(); // Update Ability Menu
 
                 // Get current open submenu
                 ModSubmenu? submenu = null;

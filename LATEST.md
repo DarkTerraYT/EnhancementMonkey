@@ -1,1 +1,1 @@
-Fix pricing bug
+Fix for v52
