@@ -16,7 +16,7 @@ using static Il2CppAssets.Scripts.Simulation.Simulation;
 
 [assembly: MelonInfo(typeof(EnhancementMonkey.EnhancementMonkey), ModHelperData.Name, ModHelperData.Version, ModHelperData.RepoOwner)]
 [assembly: MelonGame("Ninja Kiwi", "BloonsTD6")]
-[assembly: MelonOptionalDependencies("CardMonkey", "BananaFarmParagon")]
+[assembly: MelonOptionalDependencies("CardMonkey")]
 
 namespace EnhancementMonkey;
 

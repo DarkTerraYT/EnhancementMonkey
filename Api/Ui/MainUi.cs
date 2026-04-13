@@ -22,9 +22,9 @@ namespace EnhancementMonkey.Api.Ui
     [RegisterTypeInIl2Cpp(false)]
     public class MainUi : MonoBehaviour
     {
-        public static MainUi? instance = null;
+        public static MainUi instance;
 
-        public static ModHelperInputField? inputField;
+        public static ModHelperInputField inputField;
 
         private static ModHelperScrollPanel enhancementScrollPanel;
 
@@ -230,7 +230,7 @@ namespace EnhancementMonkey.Api.Ui
 
             var title = panel1.AddText(new("Title_", 0, 420, PanelWidth, 160), "Enhancement Levels", 78);
 
-            UpgradeEnhancement? enhancement = null;
+            UpgradeEnhancement enhancement = null;
             foreach (var enhancement_ in GetContent<UpgradeEnhancement>())
             {
                 if (!enhancement_.Locked)

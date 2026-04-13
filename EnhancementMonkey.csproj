@@ -3,7 +3,6 @@
         <TargetFramework>net6.0</TargetFramework>
         <RootNamespace>EnhancementMonkey</RootNamespace>
         <Configurations>Debug;Release</Configurations>
-        <Nullable>enable</Nullable>
         <AssemblyName>EnhancementMonkey</AssemblyName>
         <LangVersion>latest</LangVersion>
         <Optimize>False</Optimize>
@@ -17,14 +16,6 @@
     </ItemGroup>
     <ItemGroup>
         <Content Include=".github\workflows\build.yml" />
-    </ItemGroup>
-    <ItemGroup>
-      <Reference Include="BananaFarmParagon">
-        <HintPath>Optional Dependencies\BananaFarmParagon.dll</HintPath>
-      </Reference>
-      <Reference Include="CardMonkey">
-        <HintPath>Optional Dependencies\CardMonkey.dll</HintPath>
-      </Reference>
     </ItemGroup>
 
     <Import Project="..\btd6.targets" />
